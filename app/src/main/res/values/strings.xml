@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">FG manager</string>
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome!"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="Enter_name_of_product">Введите название</string>
+    <string name="Title_of_Barcode">Штрих код:</string>
+    <string name="hint_Enter_Of_Barcode">Введите штрихкод</string>
+    <string name="title_Of_Product">Название:</string>
+    <string name="cancel">Cancel</string>
+    <string name="title_Of_Date">Дата:</string>
+    <string name="hint_tv_SelectedDate">MM/DD/YYYY</string>
+    <string name="Title_of_Days">Дней:</string>
+    <string name="sign_out">Sign out</string>
+    <string name="sign_in">Sign in</string>
+    <string name="user_name">User name</string>
+</resources>

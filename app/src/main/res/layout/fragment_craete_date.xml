@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".CraeteDateFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <EditText
+            android:id="@+id/et_Name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:ems="10"
+            android:hint="@string/Enter_name_of_product"
+            android:inputType="textPersonName"
+            android:minHeight="48dp"
+            app:layout_constraintEnd_toEndOf="@+id/et_Barcode"
+            app:layout_constraintHorizontal_bias="0.058"
+            app:layout_constraintStart_toEndOf="@+id/tv_Barcode"
+            app:layout_constraintTop_toBottomOf="@+id/et_Barcode" />
+
+        <TextView
+            android:id="@+id/tv_Barcode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="6dp"
+            android:text="@string/Title_of_Barcode"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="@+id/et_Barcode"
+            app:layout_constraintEnd_toStartOf="@+id/et_Barcode"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/et_Barcode" />
+
+        <EditText
+            android:id="@+id/et_Barcode"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="160dp"
+            android:layout_marginEnd="10dp"
+            android:ems="10"
+            android:hint="@string/hint_Enter_Of_Barcode"
+            android:inputType="number|numberDecimal"
+            android:minHeight="48dp"
+            app:layout_constraintEnd_toStartOf="@+id/im_scan_Barcode"
+            app:layout_constraintStart_toEndOf="@+id/tv_Barcode"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_Name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="6dp"
+            android:text="@string/title_Of_Product"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="@+id/et_Name"
+            app:layout_constraintEnd_toEndOf="@+id/tv_Barcode"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/et_Name"
+            app:layout_constraintVertical_bias="0.55" />
+
+        <Button
+            android:id="@+id/b_Ok"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="80dp"
+            android:text="Ok"
+            app:layout_constraintBottom_toTopOf="@+id/barrier"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/b_Cancel"
+            app:layout_constraintVertical_bias="0.509"
+            tools:ignore="HardcodedText" />
+
+        <Button
+            android:id="@+id/b_Cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="35dp"
+            android:text="@string/cancel"
+            app:layout_constraintBottom_toTopOf="@+id/barrier"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/b_Ok"
+            app:layout_constraintTop_toBottomOf="@+id/tv_Date"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <ImageView
+            android:id="@+id/im_scan_Barcode"
+            android:layout_width="44dp"
+            android:layout_height="46dp"
+            android:layout_marginEnd="10dp"
+            android:src="@android:drawable/ic_menu_camera"
+            app:layout_constraintBottom_toBottomOf="@+id/et_Barcode"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/et_Barcode"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/barrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="411dp"
+            android:layout_marginBottom="261dp"
+            app:barrierDirection="top"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_DateTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:text="@string/title_Of_Date"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_Date"
+            app:layout_constraintEnd_toEndOf="@+id/tv_Name"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_Date"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/tv_Date"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="35dp"
+            android:hint="@string/hint_tv_SelectedDate"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="@+id/et_Name"
+            app:layout_constraintStart_toStartOf="@+id/et_Name"
+            app:layout_constraintTop_toBottomOf="@+id/et_Name" />
+
+        <ImageView
+            android:id="@+id/im_Calendar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/ic_menu_day"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_Date"
+            app:layout_constraintEnd_toEndOf="@+id/im_scan_Barcode"
+            app:layout_constraintStart_toEndOf="@+id/et_Barcode"
+            app:layout_constraintTop_toTopOf="@+id/tv_Date"
+            app:layout_constraintVertical_bias="0.0" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

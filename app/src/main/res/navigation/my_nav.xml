@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/my_nav"
+    app:startDestination="@id/loginFragment">
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.fgm.fgmanager.ui.login.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_loginFragment_to_itemFragment"
+            app:destination="@id/itemFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/craeteDateFragment"
+        android:name="com.fgm.fgmanager.CraeteDateFragment"
+        android:label="fragment_craete_date"
+        tools:layout="@layout/fragment_craete_date" >
+        <action
+            android:id="@+id/action_craeteDateFragment_to_scanBarcodeFragment"
+            app:destination="@id/scanBarcodeFragment" />
+        <action
+            android:id="@+id/action_craeteDateFragment_to_calendarFragment"
+            app:destination="@id/calendarFragment" />
+        <action
+            android:id="@+id/action_craeteDateFragment_to_itemFragment"
+            app:destination="@id/itemFragment" />
+        <argument
+            android:name="ProductForFirebase"
+            app:argType="string[]" />
+    </fragment>
+    <fragment
+        android:id="@+id/scanBarcodeFragment"
+        android:name="com.fgm.fgmanager.ScanBarcodeFragment"
+        android:label="fragment_scan_barcode"
+        tools:layout="@layout/fragment_scan_barcode" >
+        <action
+            android:id="@+id/action_scanBarcodeFragment_to_craeteDateFragment"
+            app:destination="@id/craeteDateFragment" />
+        <argument
+            android:name="BarcodeResult"
+            app:argType="integer"
+            android:defaultValue="0" />
+    </fragment>
+    <fragment
+        android:id="@+id/calendarFragment"
+        android:name="com.fgm.fgmanager.CalendarFragment"
+        android:label="fragment_calendar"
+        tools:layout="@layout/fragment_calendar" >
+        <action
+            android:id="@+id/action_calendarFragment_to_craeteDateFragment"
+            app:destination="@id/craeteDateFragment" />
+        <argument
+            android:name="Date"
+            app:argType="string"
+            android:defaultValue="DD//MM//YYYY" />
+        <argument
+            android:name="NumberOfDays"
+            app:argType="string"
+            android:defaultValue="0" />
+    </fragment>
+    <fragment
+        android:id="@+id/itemFragment"
+        android:name="com.fgm.fgmanager.ItemFragment"
+        android:label="fragment_item_list"
+        tools:layout="@layout/fragment_item_list" >
+        <action
+            android:id="@+id/action_itemFragment_to_craeteDateFragment"
+            app:destination="@id/craeteDateFragment" />
+        <action
+            android:id="@+id/action_itemFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_itemFragment_self"
+            app:destination="@id/itemFragment" />
+    </fragment>
+</navigation>

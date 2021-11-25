@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "23821972425",
+    "firebase_url": "https://fgmanager-d51a4-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "fgmanager-d51a4",
+    "storage_bucket": "fgmanager-d51a4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:23821972425:android:76704dac357a2d7635ae18",
+        "android_client_info": {
+          "package_name": "com.fgm.fgmanager"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "23821972425-nm8riupbpcql7fl21s811ns1rvads94v.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fgm.fgmanager",
+            "certificate_hash": "55ed0cd8d4637aa31486f4c1e79e3281f7db074d"
+          }
+        },
+        {
+          "client_id": "23821972425-io2ea32thbrhm6vrqvlsqvgim5g2g64p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD0fV4Wwl9rXvnd9tbPQyhDjkNq0ft8Flc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "23821972425-io2ea32thbrhm6vrqvlsqvgim5g2g64p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
