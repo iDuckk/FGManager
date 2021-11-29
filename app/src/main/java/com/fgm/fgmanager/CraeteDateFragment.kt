@@ -1,6 +1,5 @@
 package com.fgm.fgmanager
 
-import android.content.ContentValues.TAG
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
@@ -9,15 +8,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.activity.OnBackPressedCallback
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
 import androidx.navigation.Navigation
-import com.fgm.fgmanager.R
-import com.fgm.fgmanager.STORAGE
-import com.fgm.fgmanager.placeholder.PlaceholderContent
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import java.util.ArrayList
 
 // TODO: Rename parameter arguments, choose names that match
@@ -38,7 +35,7 @@ class CraeteDateFragment : Fragment() {
     val CAMERA_RQ = 102
 
     val database = FirebaseDatabase.getInstance()
-    val myRef = database.getReference("Product")
+    val myRef = database.getReference(STORAGE.FireBasePathForSaveProduct)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,6 +58,7 @@ class CraeteDateFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val bundle = Bundle()
+        val arrayOfSaveprod = CreateFireDBForSaveProduct() //Receive database ofName Of products for fill TextEdit Name
 
         val et_NameProduct = view.findViewById<EditText>(R.id.et_Name)
         val et_Barcode = view.findViewById<EditText>(R.id.et_Barcode)
@@ -90,6 +88,18 @@ class CraeteDateFragment : Fragment() {
             arguments?.getString("MyArg")   //Receive String Barcode from Barcode Fragment
         if (BarcodeResult != null) {
             et_Barcode.setText(BarcodeResult)
+            //Set Name Product from ProductNameFDB IF we receive Barcode From CAMERA
+            if(SetExistNameToEditTextNameOfProduct(BarcodeResult, arrayOfSaveprod) != ""){
+                Log.d("TAG", SetExistNameToEditTextNameOfProduct(BarcodeResult, arrayOfSaveprod))   //Receive Name
+                et_NameProduct.setText(SetExistNameToEditTextNameOfProduct(BarcodeResult, arrayOfSaveprod)) //Set Text
+            }
+        }else{
+            //Set Name Product from ProductNameFDB we receive Barcode From TYPING
+            et_Barcode.setOnClickListener(){
+                if(SetExistNameToEditTextNameOfProduct(et_Barcode.text.toString(), arrayOfSaveprod) != ""){
+                    et_NameProduct.setText(SetExistNameToEditTextNameOfProduct(et_Barcode.text.toString(), arrayOfSaveprod))    //Set Text
+                }
+            }
         }
 
         val SelectDate = arguments?.getString("Date")   //Receive String Date from Calendar Fragment
@@ -106,7 +116,22 @@ class CraeteDateFragment : Fragment() {
 
         b_Ok.setOnClickListener {
             //Add Arguments in FireBase IF arguments do not NULL
-            if(et_NameProduct.text.toString() != "" && et_Barcode.text.toString() != ""&& tv_Date.text.toString() != "" && amountDays.toString() != "" && amountDays!!.toInt() > 0) {
+            if(et_NameProduct.text.toString() != "" && et_Barcode.text.toString() != ""&& tv_Date.text.toString() != ""
+                && amountDays.toString() != "" && amountDays!!.toInt() > 0) {
+            //Add new Name of Product
+                    for (i in 0..arrayOfSaveprod.lastIndex) // arrayOfSaveprod.lastIndex - amount of SaveProductNameDB
+                        if (et_Barcode.text.toString() != arrayOfSaveprod[i].productBarcode){
+                            STORAGE.booleanForCheckExistsOfNameOfProducts = true //If new name doesn't exist
+                        }
+                if (STORAGE.booleanForCheckExistsOfNameOfProducts){ //add new Name product to ProductDB
+                    myRef.push().setValue(
+                        SaveProductNameDB(
+                            et_NameProduct.text.toString(),
+                            et_Barcode.text.toString()
+                        )
+                    )
+                    STORAGE.booleanForCheckExistsOfNameOfProducts = false
+                }
                 //add arguments in array for create new Items
                 val arrayOfTitle: ArrayList<String> = ArrayList()
                 arrayOfTitle+=et_NameProduct.text.toString()
@@ -191,6 +216,7 @@ class CraeteDateFragment : Fragment() {
             else -> getActivity()?.let { ActivityCompat.requestPermissions(it, arrayOf(android.Manifest.permission.CAMERA), CAMERA_RQ) }
         }
 
+//************************************************************************************************************************************
         /*   fun checkForPermissions(permission: String, name: String, requestCode: Int){
        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
            when{
@@ -210,5 +236,40 @@ class CraeteDateFragment : Fragment() {
    checkForPermissions(android.Manifest.permission.CAMERA, "camera", CAMERA_RQ)
    */
     }
+
+    fun CreateFireDBForSaveProduct() : ArrayList<SaveProductNameDB> {
+        var arrayOfSaveProducts: ArrayList<SaveProductNameDB> = ArrayList()
+        myRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (arrayOfSaveProducts.size > 0) arrayOfSaveProducts.clear() //IF ArrayList doesn't empty
+                for (ds: DataSnapshot in snapshot.children) //Get All children from FireBase
+                {
+                    val item =
+                        ds.getValue(SaveProductNameDB::class.java)  //Take ONE item
+                    if (item != null) {
+                        arrayOfSaveProducts.add(item)   //Add item
+//                        Log.d("TAG", item.productName)
+                    }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+        })
+        return arrayOfSaveProducts
+    }
+
+    fun SetExistNameToEditTextNameOfProduct(name : String, arrayOfSaveProduct: ArrayList<SaveProductNameDB>) : String {
+        var strName : String = ""
+        for (i in 0..arrayOfSaveProduct.lastIndex) { // arrayOfSaveprod.lastIndex - amount of SaveProductNameDB
+            if (name == arrayOfSaveProduct[i].productBarcode) {
+                strName = arrayOfSaveProduct[i].productName.toString()
+            } else strName = ""
+        }
+        return strName
+    }
+
 
 }

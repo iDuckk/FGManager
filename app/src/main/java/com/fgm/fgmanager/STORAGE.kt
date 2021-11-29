@@ -13,7 +13,9 @@ class STORAGE {
 
         //CreateDateParameters
         var booleanForRestoreCreateDateParameters : Boolean = false
+        var booleanForCheckExistsOfNameOfProducts = false
 
         const val FireBasePath = "Product"
+        const val FireBasePathForSaveProduct = "ProductDB"
     }
 }

@@ -143,6 +143,8 @@ class ItemFragment : Fragment() {
             PlaceholderContent.ITEMS.add(item)
             //RecView.adapter?.notifyItemInserted(STORAGE.localDsArray.size)    // If change, Reload Recycler View
             newItem.clear()
+            PlaceholderContent.ITEMS.sortBy { it.numberForSorting } // Sorting of List
+            RecView.adapter?.notifyDataSetChanged()
         }
     }
 }
