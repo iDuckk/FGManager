@@ -12,14 +12,14 @@
 
         <EditText
             android:id="@+id/et_Name"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
             android:ems="10"
             android:hint="@string/Enter_name_of_product"
             android:inputType="textPersonName"
             android:minHeight="48dp"
-            app:layout_constraintEnd_toEndOf="@+id/et_Barcode"
+            app:layout_constraintEnd_toStartOf="@+id/im_scan_Barcode"
             app:layout_constraintHorizontal_bias="0.058"
             app:layout_constraintStart_toEndOf="@+id/tv_Barcode"
             app:layout_constraintTop_toBottomOf="@+id/et_Barcode" />
@@ -42,7 +42,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="160dp"
-            android:layout_marginEnd="10dp"
+            android:layout_marginEnd="2dp"
             android:ems="10"
             android:hint="@string/hint_Enter_Of_Barcode"
             android:inputType="number|numberDecimal"
@@ -120,6 +120,7 @@
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="@+id/tv_Date"
             app:layout_constraintEnd_toEndOf="@+id/tv_Name"
+            app:layout_constraintHorizontal_bias="0.125"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tv_Date"
             app:layout_constraintVertical_bias="0.0" />

@@ -3,17 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/my_nav"
-    app:startDestination="@id/loginFragment">
+    app:startDestination="@id/myLoginFragment">
 
-    <fragment
-        android:id="@+id/loginFragment"
-        android:name="com.fgm.fgmanager.ui.login.LoginFragment"
-        android:label="fragment_login"
-        tools:layout="@layout/fragment_login" >
-        <action
-            android:id="@+id/action_loginFragment_to_itemFragment"
-            app:destination="@id/itemFragment" />
-    </fragment>
     <fragment
         android:id="@+id/craeteDateFragment"
         android:name="com.fgm.fgmanager.CraeteDateFragment"
@@ -71,10 +62,19 @@
             android:id="@+id/action_itemFragment_to_craeteDateFragment"
             app:destination="@id/craeteDateFragment" />
         <action
-            android:id="@+id/action_itemFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
-        <action
             android:id="@+id/action_itemFragment_self"
+            app:destination="@id/itemFragment" />
+        <action
+            android:id="@+id/action_itemFragment_to_myLoginFragment"
+            app:destination="@id/myLoginFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/myLoginFragment"
+        android:name="com.fgm.fgmanager.myLoginFragment"
+        android:label="fragment_my_login"
+        tools:layout="@layout/fragment_my_login" >
+        <action
+            android:id="@+id/action_myLoginFragment_to_itemFragment"
             app:destination="@id/itemFragment" />
     </fragment>
 </navigation>

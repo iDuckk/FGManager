@@ -17,5 +17,8 @@ class STORAGE {
 
         const val FireBasePath = "Product"
         const val FireBasePathForSaveProduct = "ProductDB"
+
+        //Login Fragment
+        var CheckLogin : Boolean = false
     }
 }

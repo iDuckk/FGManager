@@ -35,7 +35,7 @@
 
         <TextView
             android:id="@+id/tv_User"
-            android:layout_width="693dp"
+            android:layout_width="628dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center|start"

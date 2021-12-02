@@ -17,9 +17,10 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
 import androidx.navigation.Navigation
-import com.fgm.fgmanager.data.LoginDataSource
 import com.fgm.fgmanager.placeholder.PlaceholderContent
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.*
+import com.google.firebase.ktx.Firebase
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
@@ -126,7 +127,9 @@ class ItemFragment : Fragment() {
             .setIcon(android.R.drawable.ic_dialog_alert)
             .setMessage("Вы уверены, что хотите выйти из приложения?")
             .setPositiveButton("OK"){
-                    dialog, id ->Navigation.findNavController(view).navigate(R.id.action_itemFragment_to_loginFragment)
+                    dialog, id ->
+                logOut()
+                Navigation.findNavController(view).navigate(R.id.action_itemFragment_to_myLoginFragment)
             }
             .setNegativeButton("Отмена", null)
             .create()
@@ -146,5 +149,10 @@ class ItemFragment : Fragment() {
             PlaceholderContent.ITEMS.sortBy { it.numberForSorting } // Sorting of List
             RecView.adapter?.notifyDataSetChanged()
         }
+    }
+
+    fun logOut(){
+        auth = Firebase.auth
+        auth.signOut()
     }
 }
