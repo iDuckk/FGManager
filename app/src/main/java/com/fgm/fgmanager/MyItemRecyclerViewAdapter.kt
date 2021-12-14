@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.navigation.Navigation
+import com.fgm.fgmanager.DBHelper.DBHelper
 
 import com.fgm.fgmanager.placeholder.PlaceholderContent.PlaceholderItem
 import com.fgm.fgmanager.databinding.FragmentItemBinding
@@ -49,7 +50,7 @@ class MyItemRecyclerViewAdapter(
 //        holder.idView.text = item.id
 //        holder.contentView.text = item.content
 
-        FirstElementAsButton(holder, position) // Create first element as Button
+//        FirstElementAsButton(holder, position) // Create first element as Button
         SetColorPriorityRecycleView(holder, position)   //Set Color Priority
         SetTextItemRecycleView(holder, position)       //Set Text Recycle view
         DialogToDelete(holder, position)              //Delete Item
@@ -99,7 +100,7 @@ class MyItemRecyclerViewAdapter(
     fun SetColorPriorityRecycleView(holder: ViewHolder, pos : Int){
         val item = values[pos]
         val amountInt: Int? = item.amountDays.toIntOrNull()
-        if(pos != 0) {
+//        if(pos != 0) {
             if (amountInt != null && amountInt > 0) {
                 when {
                     amountInt <= 14 -> holder.tv_Item_NameProduct.setBackgroundResource(R.color.red)
@@ -108,7 +109,7 @@ class MyItemRecyclerViewAdapter(
                 }
             } else
                 holder.tv_Item_NameProduct.setBackgroundResource(R.color.grey)
-        }
+//        }
     }
     fun SetTextItemRecycleView(holder: ViewHolder, pos : Int){
         val item = values[pos]
@@ -130,8 +131,15 @@ class MyItemRecyclerViewAdapter(
                     .setMessage("Удалить элемент?")
                     .setPositiveButton("Да") {       //When click "Yes"
                             dialog, id ->
-                        myRef.child(values[position].keyProduct).removeValue()          //Delete Item
-                        Log.d("TAG", values[position].keyProduct)
+                        if(STORAGE.TypeAccFree) {
+                            myRef.child(values[position].keyProduct)
+                                .removeValue()          //Delete Item
+                            //Log.d("TAG", values[position].keyProduct)
+                        }else{
+                            val db = DBHelper(par!!,null)
+                            db.deleteCourse(values[position].keyProduct.toInt())
+                            Log.d("TAG", values[position].keyProduct.toString())
+                        }
                         //action_itemFragment_self
                         Navigation.findNavController(holder.itemView)
                             .navigate(R.id.action_itemFragment_self) // That refresh ItemFragment

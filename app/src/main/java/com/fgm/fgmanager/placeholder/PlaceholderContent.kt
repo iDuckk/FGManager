@@ -3,7 +3,9 @@ package com.fgm.fgmanager.placeholder
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.recyclerview.widget.RecyclerView
 import com.fgm.fgmanager.STORAGE
+import com.fgm.fgmanager.myRef
 import com.google.firebase.database.*
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter

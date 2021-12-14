@@ -22,4 +22,6 @@
     <string name="sign_out">Sign out</string>
     <string name="sign_in">Sign in</string>
     <string name="user_name">User name</string>
+    <string name="start_free_version">Start free version</string>
+    <string name="textButtonOfAddProduct">+</string>
 </resources>

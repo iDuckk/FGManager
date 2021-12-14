@@ -11,10 +11,14 @@ import android.widget.*
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.navigation.Navigation
+import com.fgm.fgmanager.DBHelper.DBHelper
+import com.fgm.fgmanager.placeholder.PlaceholderContent
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import java.time.LocalDate
+import java.time.temporal.ChronoUnit
 import java.util.ArrayList
 
 // TODO: Rename parameter arguments, choose names that match
@@ -68,8 +72,11 @@ class CraeteDateFragment : Fragment() {
         val image_Calendar = view.findViewById<ImageView>(R.id.im_Calendar)
         val image_Bacode = view.findViewById<ImageView>(R.id.im_scan_Barcode)
         val tv_AmountDate = view.findViewById<TextView>(R.id.tv_amount_days)
-
         val mActivity : MainActivity = activity as MainActivity
+        val b_AddProduct = mActivity.findViewById<Button>(R.id.button_Add_Product)
+
+        //Set Visible Button Add New Product
+        b_AddProduct.visibility = View.GONE
         //Take off TextView SignOut
         val tv_SignOut = mActivity.findViewById<TextView>(R.id.tv_SignOut)
         tv_SignOut.visibility = View.GONE
@@ -119,36 +126,61 @@ class CraeteDateFragment : Fragment() {
             if(et_NameProduct.text.toString() != "" && et_Barcode.text.toString() != ""&& tv_Date.text.toString() != ""
                 && amountDays.toString() != "" && amountDays!!.toInt() > 0) {
             //Add new Name of Product
+                if(STORAGE.TypeAccFree) {                                                                      //FIRE DATA BASE
                     for (i in 0..arrayOfSaveprod.lastIndex) // arrayOfSaveprod.lastIndex - amount of SaveProductNameDB
-                        if (et_Barcode.text.toString() != arrayOfSaveprod[i].productBarcode){
-                            STORAGE.booleanForCheckExistsOfNameOfProducts = true //If new name doesn't exist
+                        if (et_Barcode.text.toString() != arrayOfSaveprod[i].productBarcode) {
+                            STORAGE.booleanForCheckExistsOfNameOfProducts =
+                                true //If new name doesn't exist
                         }
-                if (STORAGE.booleanForCheckExistsOfNameOfProducts){ //add new Name product to ProductDB
-                    myRef.push().setValue(
-                        SaveProductNameDB(
-                            et_NameProduct.text.toString(),
-                            et_Barcode.text.toString()
+                    if (STORAGE.booleanForCheckExistsOfNameOfProducts) { //add new Name product to ProductDB
+                        myRef.push().setValue(
+                            SaveProductNameDB(
+                                et_NameProduct.text.toString(),
+                                et_Barcode.text.toString()
+                            )
                         )
-                    )
-                    STORAGE.booleanForCheckExistsOfNameOfProducts = false
-                }
-                //add arguments in array for create new Items
-                val arrayOfTitle: ArrayList<String> = ArrayList()
-                arrayOfTitle+=et_NameProduct.text.toString()
-                arrayOfTitle+=et_Barcode.text.toString()
-                arrayOfTitle+=tv_Date.text.toString()
-                arrayOfTitle+=amountDays
-                //Send array to ItemActivity, I do it because I need refresh immediately RecycleView
-                bundle.putStringArrayList("NameProductForFirebase", arrayOfTitle)
+                        STORAGE.booleanForCheckExistsOfNameOfProducts = false
+                    }
+                    //add arguments in array for create new Items
+                    val arrayOfTitle: ArrayList<String> = ArrayList()
+                    arrayOfTitle += et_NameProduct.text.toString()
+                    arrayOfTitle += et_Barcode.text.toString()
+                    arrayOfTitle += tv_Date.text.toString()
+                    arrayOfTitle += amountDays
+                    //Send array to ItemActivity, I do it because I need refresh immediately RecycleView
+                    bundle.putStringArrayList("NameProductForFirebase", arrayOfTitle)
+                }else{                                                                                      //LOCAL DATA BASE if Free account
+                    // below we have created
+                    // a new DBHelper class,
+                    // and passed context to it
+                    val db = DBHelper(requireContext(), null)
 
-//                myRef.push().setValue(
-//                    PlaceholderContent.PlaceholderItem(
-//                        et_NameProduct.text.toString(),
-//                        et_Barcode.text.toString(),
-//                        tv_Date.text.toString(),
-//                        "" //Because Amount changes everyday, need to reCount Value in ItemFragment. I just do not want reWrit my Code =) And do not delete calculating
-//                    )
-//                )
+                    // creating variables for values
+                    // in name and age edit texts
+                    // productName : String, productBarcode : String, productDate : String, productAmountDays : String
+                    val productName = et_NameProduct.text.toString()
+                    val productBarcode = et_Barcode.text.toString()
+                    val productDate = tv_Date.text.toString()
+                    val productAmountDays = amountDays
+
+                    // calling method to add
+                    // name to our database
+                    db.addProduct(productName, productBarcode, productDate, productAmountDays)
+
+                    // Toast to message on the screen
+                    //Toast.makeText(requireContext(), productName + " added to database", Toast.LENGTH_LONG).show()
+//                    val arrayOfSavedProdSQL = CreateLocalDBForSavedNames()
+//                    for (i in 0..arrayOfSavedProdSQL.lastIndex) // arrayOfSaveprod.lastIndex - amount of SaveProductNameDB
+//                        if (et_Barcode.text.toString() != arrayOfSavedProdSQL[i].productBarcode) {
+//                            STORAGE.booleanForCheckExistsOfNameOfProducts =
+//                                true //If new name doesn't exist
+//                        }
+//                    if (STORAGE.booleanForCheckExistsOfNameOfProducts) { //add new Name product to ProductDB
+//                        addNameProductSQLdb(et_NameProduct.text.toString(), et_Barcode.text.toString())
+//                        STORAGE.booleanForCheckExistsOfNameOfProducts = false
+//                    }
+                }
+
                 Navigation.findNavController(view).navigate(R.id.action_craeteDateFragment_to_itemFragment, bundle)
             }else{
                 Toast.makeText(requireContext(), "Please fill all gaps or maybe data is not correct", Toast.LENGTH_SHORT).show()
@@ -269,6 +301,49 @@ class CraeteDateFragment : Fragment() {
             } else strName = ""
         }
         return strName
+    }
+
+    fun CreateLocalDBForSavedNames() : ArrayList<SaveProductNameDB>{
+        var arrayOfSaveProducts: ArrayList<SaveProductNameDB> = ArrayList()
+        val dbName = DBHelper(requireContext(), null)
+
+        // below is the variable for cursor
+        // we have called method to get
+        // all names from our database
+        // and add to name text view
+        val cursor = dbName.getProduct()
+        // moving the cursor to first position and
+        // appending value in the text view
+        cursor!!.moveToFirst()
+
+        //PlaceholderContent.ITEMS.clear()
+        val item = SaveProductNameDB(cursor.getString(cursor.getColumnIndex(DBHelper.PRODUCT_NAME)).toString(), cursor.getString(cursor.getColumnIndex(DBHelper.PRODUCT_BARCODE)).toString())
+        arrayOfSaveProducts.add(item)
+
+        // moving our cursor to next
+        // position and appending values
+        while(cursor.moveToNext()){
+            val item = SaveProductNameDB(cursor.getString(cursor.getColumnIndex(DBHelper.PRODUCT_NAME)).toString(), cursor.getString(cursor.getColumnIndex(DBHelper.PRODUCT_BARCODE)).toString())
+            arrayOfSaveProducts.add(item)
+        }
+
+        // at last we close our cursor
+        cursor.close()
+        return arrayOfSaveProducts
+    }
+
+    fun addNameProductSQLdb(name : String, barCode : String){
+        val dbName = DBHelper(requireContext(), null)
+
+        val productName = name //et_NameProduct.text.toString()
+        val productBarcode = barCode //et_Barcode.text.toString()
+        val productDate = ""
+        val productAmountDays = ""
+
+        // calling method to add
+        // name to our database
+        dbName.addProduct(productName, productBarcode, productDate, productAmountDays)
+
     }
 
 

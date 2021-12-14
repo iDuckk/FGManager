@@ -18,7 +18,11 @@ class STORAGE {
         const val FireBasePath = "Product"
         const val FireBasePathForSaveProduct = "ProductDB"
 
-        //Login Fragment
-        var CheckLogin : Boolean = false
+        //DataBaseOfItemFragment When Log in
+       var TypeAccFree : Boolean = false
+
+        //SQL DataBase
+        val TABLE_PRODUCTS = "products_table"
+        val TABLE_NAME_PRODUCTS = "productsName_table"
     }
 }
