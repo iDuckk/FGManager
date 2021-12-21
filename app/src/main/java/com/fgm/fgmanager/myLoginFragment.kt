@@ -2,6 +2,7 @@ package com.fgm.fgmanager
 
 import android.content.res.ColorStateList
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,12 +11,11 @@ import android.widget.*
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.navigation.Navigation
-import com.fgm.fgmanager.placeholder.PlaceholderContent
+import com.fgm.fgmanager.DBHelpers.DBHelperLogIn
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-
-
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -82,10 +82,12 @@ class myLoginFragment : Fragment() {
                 }
             }
         )
+        isNotFirstLogIn() // If we logged yet
 
         b_Login.setOnClickListener(){
             if(et_Username.text.toString() != "" && et_Password.text.toString() != ""){
-                login(et_Username.text.toString(), et_Password.text.toString())
+                loginCloudFS(et_Username.text.toString(), et_Password.text.toString())
+                //login(et_Username.text.toString(), et_Password.text.toString())
             }else {
                 if(et_Username.text.toString() == "") {
                     et_Username.setError("Fill the gap")
@@ -126,6 +128,8 @@ class myLoginFragment : Fragment() {
                     putString(ARG_PARAM2, param2)
                 }
             }
+        const val NOTIFICATION_ID = 101
+        const val CHANNEL_ID = "channelID"
     }
 
     fun login(username: String, password: String){
@@ -154,4 +158,64 @@ class myLoginFragment : Fragment() {
         STORAGE.TypeAccFree = false
         Navigation.findNavController(this.requireView()).navigate(R.id.action_myLoginFragment_to_itemFragment)
     }
-}
+
+    fun loginCloudFS(username: String, password: String){
+        val dbSaveLogin = DBHelperLogIn(requireContext(), null)
+        val db = Firebase.firestore
+        val mActivity : MainActivity = activity as MainActivity
+        val tv_Users = mActivity.findViewById<TextView>(R.id.tv_User)
+        val progressBar = mActivity.findViewById<ProgressBar>(R.id.progressBar)
+        if(username != "" && password != "") {
+            val docRef = db.collection("Admin").document(username)
+            docRef.get()
+                .addOnSuccessListener { document ->
+                    if (document != null && document.get("User") == username) { //password ADD
+                        //Log.d("TAG", "DocumentSnapshot data: ${document.data}")
+                        dbSaveLogin.addUser(username, password)
+                        progressBar.visibility = View.VISIBLE
+                        STORAGE.TypeAccFree = true
+                        tv_Users.setText(username)
+                        Navigation.findNavController(this.requireView())
+                            .navigate(R.id.action_myLoginFragment_to_itemFragment)
+                    } else {
+                        Log.d("TAG", "No such document")
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    Log.d("TAG", "get failed with ", exception)
+                }
+        }
+    }
+
+    fun isNotFirstLogIn(){
+        val dbSaveLogin = DBHelperLogIn(requireContext(), null)
+        var userName : String
+        var password : String
+        val cursor = dbSaveLogin.getUser()
+        cursor!!.moveToFirst()
+
+        if(cursor.count != 0) {
+            var userName = cursor.getString(cursor.getColumnIndex(DBHelperLogIn.USER_NAME)).toString()
+            var password = cursor.getString(cursor.getColumnIndex(DBHelperLogIn.USER_PAS)).toString()
+            loginCloudFS(userName, password)
+        }
+        cursor.close()
+    }
+        //**
+
+//            .addOnSuccessListener { result ->
+//                for (document in result) {
+//                    val user : MutableMap<String, Any> = document.data
+//                    if(user.get("User").toString() == "AdminEgor" && user.get("Password").toString() == "12345q"){
+//                        progressBar.visibility = View.VISIBLE
+//                        STORAGE.TypeAccFree = true
+//                        tv_Users.setText(username)
+//                        Navigation.findNavController(this.requireView()).navigate(R.id.action_myLoginFragment_to_itemFragment)
+//                    }
+//                    //Log.d("TAG", "${document.id} => ${document.data} ===== ${user.get("User").toString()}")
+//                }
+//            }
+//            .addOnFailureListener { exception ->
+//                Log.w("TAG", "Error getting documents.", exception)
+//            }
+    }

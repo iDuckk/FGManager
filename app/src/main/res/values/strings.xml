@@ -24,4 +24,5 @@
     <string name="user_name">User name</string>
     <string name="start_free_version">Start free version</string>
     <string name="textButtonOfAddProduct">+</string>
+    <string name="Notification">Напоминание</string>
 </resources>

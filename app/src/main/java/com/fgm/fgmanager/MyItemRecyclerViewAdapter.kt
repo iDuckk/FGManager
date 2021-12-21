@@ -10,7 +10,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.navigation.Navigation
-import com.fgm.fgmanager.DBHelper.DBHelper
+import com.fgm.fgmanager.DBHelpers.DBHelper
 
 import com.fgm.fgmanager.placeholder.PlaceholderContent.PlaceholderItem
 import com.fgm.fgmanager.databinding.FragmentItemBinding
@@ -138,7 +138,7 @@ class MyItemRecyclerViewAdapter(
                         }else{
                             val db = DBHelper(par!!,null)
                             db.deleteCourse(values[position].keyProduct.toInt())
-                            Log.d("TAG", values[position].keyProduct.toString())
+                            //Log.d("TAG", values[position].keyProduct.toString())
                         }
                         //action_itemFragment_self
                         Navigation.findNavController(holder.itemView)

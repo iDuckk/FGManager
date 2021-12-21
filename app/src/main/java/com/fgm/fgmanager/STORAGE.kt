@@ -24,5 +24,6 @@ class STORAGE {
         //SQL DataBase
         val TABLE_PRODUCTS = "products_table"
         val TABLE_NAME_PRODUCTS = "productsName_table"
+
     }
 }

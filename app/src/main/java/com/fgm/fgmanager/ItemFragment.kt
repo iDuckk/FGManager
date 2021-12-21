@@ -17,7 +17,8 @@ import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
 import androidx.navigation.Navigation
-import com.fgm.fgmanager.DBHelper.DBHelper
+import com.fgm.fgmanager.DBHelpers.DBHelper
+import com.fgm.fgmanager.DBHelpers.DBHelperLogIn
 import com.fgm.fgmanager.placeholder.PlaceholderContent
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
@@ -195,17 +196,6 @@ class ItemFragment : Fragment() {
         myRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (PlaceholderContent.ITEMS.size > 0) PlaceholderContent.ITEMS.clear() //IF ArrayList doesn't empty
-                //First element
-//                PlaceholderContent.ITEMS.add(
-//                    PlaceholderContent.PlaceholderItem(
-//                        "check",
-//                        "check",
-//                        "check",
-//                        "23/6/1987",
-//                        "0",
-//                        0
-//                    )
-//                )
                 for (ds: DataSnapshot in snapshot.children) //Get All children from FireBase
                 {
                     val item =
@@ -242,8 +232,15 @@ class ItemFragment : Fragment() {
     }
 
     fun logOut(){
-        auth = Firebase.auth
-        auth.signOut()
+        if(STORAGE.TypeAccFree) {
+            val mActivity: MainActivity = activity as MainActivity
+            val tv_Users = mActivity.findViewById<TextView>(R.id.tv_User)
+//            val str = tv_User
+//            tv_Users.setText("username")
+//        auth.signOut()
+            val dbSaveLogin = DBHelperLogIn(requireContext(), null)
+            dbSaveLogin.deleteCourse("Egor")
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -316,7 +313,7 @@ class ItemFragment : Fragment() {
             else {
                 countedAmountDay = ""
             }
-            Log.d("TAG",cursor.getString(cursor.getColumnIndex(DBHelper.ID_COL)).toString())
+            //Log.d("TAG","ItemFr Create {$cursor.getString(cursor.getColumnIndex(DBHelper.ID_COL)).toString()}")
                 PlaceholderContent.ITEMS.add(
                     PlaceholderContent.PlaceholderItem(
                         cursor.getString(cursor.getColumnIndex(DBHelper.PRODUCT_NAME)).toString(),

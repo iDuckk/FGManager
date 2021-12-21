@@ -1,4 +1,4 @@
-package com.fgm.fgmanager.DBHelper
+package com.fgm.fgmanager.DBHelpers
 
 import android.content.ContentValues
 import android.content.Context
@@ -6,33 +6,29 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 
-class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
+class DBHelperLogIn(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     SQLiteOpenHelper(context, DATABASE_NAME, factory, DATABASE_VERSION) {
 
     // below is the method for creating a database by a sqlite query
     override fun onCreate(db: SQLiteDatabase) {
         // below is a sqlite query, where column names
         // along with their data types is given
-//        val query = ("CREATE TABLE " + TABLE_NAME_PRODUCTS + " ("
-//                + ID_COL + " INTEGER PRIMARY KEY, " +
-//                NAME_COl + " TEXT," +
-//                AGE_COL + " TEXT" + ")")
 
         // we are calling sqlite
         // method for executing our query
-            val query =
-                ("CREATE TABLE $TABLE_PRODUCTS($PRODUCT_NAME TEXT, $PRODUCT_BARCODE TEXT, $PRODUCT_DATE TEXT, $PRODUCT_AMOUT_DAYS TEXT, $ID_COL INTEGER PRIMARY KEY)")
-            db.execSQL(query)
+        val query =
+            ("CREATE TABLE $TABLE_NAME($USER_NAME TEXT, $USER_PAS TEXT, $ID_COL INTEGER PRIMARY KEY)")
+        db.execSQL(query)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, p1: Int, p2: Int) {
         // this method is to check if table already exists
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_PRODUCTS)
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME)
         onCreate(db)
     }
 
     // This method is for adding data in our database
-    fun addProduct(productName : String, productBarcode : String, productDate : String, productAmountDays : String ){
+    fun addUser(productName : String, productBarcode : String ){
 
         // below we are creating
         // a content values variable
@@ -40,13 +36,9 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
 
         // we are inserting our values
         // in the form of key-value pair
-//        values.put(NAME_COl, name)
-//        values.put(AGE_COL, age)
 
-        values.put(PRODUCT_NAME, productName)
-        values.put(PRODUCT_BARCODE, productBarcode)
-        values.put(PRODUCT_DATE, productDate)
-        values.put(PRODUCT_AMOUT_DAYS, productAmountDays)
+        values.put(USER_NAME, productName)
+        values.put(USER_PAS, productBarcode)
 
 
         // here we are creating a
@@ -56,7 +48,7 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         val db = this.writableDatabase
 
         // all values are inserted into database
-        db.insert(TABLE_PRODUCTS, null, values)
+        db.insert(TABLE_NAME, null, values)
 
         // at last we are
         // closing our database
@@ -65,7 +57,7 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
 
     // below method is to get
     // all data from our database
-    fun getProduct(): Cursor? {
+    fun getUser(): Cursor? {
 
         // here we are creating a readable
         // variable of our database
@@ -74,12 +66,12 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
 
         // below code returns a cursor to
         // read data from the database
-        return db.rawQuery("SELECT * FROM " + TABLE_PRODUCTS, null)
+        return db.rawQuery("SELECT * FROM " + TABLE_NAME, null)
 
     }
 
     // below is the method for deleting our course.
-    fun deleteCourse(courseID: Int) {
+    fun deleteCourse(courseID: String) {
 
         // on below line we are creating
         // a variable to write our database.
@@ -87,7 +79,7 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
 
         // on below line we are calling a method to delete our
         // course and we are comparing it with our course name.
-        db.delete(TABLE_PRODUCTS, "id=?", arrayOf(courseID.toString()))
+        db.delete(TABLE_NAME, "$USER_NAME=?", arrayOf(courseID.toString()))
         db.close()
     }
 
@@ -95,29 +87,20 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         // here we have defined variables for our database
 
         // below is variable for database name
-        private val DATABASE_NAME = "FREE_ACCOUNT"
+        private val DATABASE_NAME = "LOG_IN"
 
         // below is the variable for database version
         private val DATABASE_VERSION = 1
 
         // below is the variable for table name
-        val TABLE_PRODUCTS = "products_table"
-//        val TABLE_PRODUCT_NAMES = "productsName_table"
+        val TABLE_NAME = "user_values" //productsName_table
 
         // below is the variable for id column
         val ID_COL = "id"
 
-//        // below is the variable for name column
-//        val NAME_COl = "name"
-//
-//        // below is the variable for age column
-//        val AGE_COL = "age"
-
         //****************************************
 
-        val PRODUCT_NAME = "productName"
-        val PRODUCT_BARCODE = "productBarcode"
-        val PRODUCT_DATE = "productDate"
-        val PRODUCT_AMOUT_DAYS = "amountDays"
+        val USER_NAME = "productName"
+        val USER_PAS = "productBarcode"
     }
 }
