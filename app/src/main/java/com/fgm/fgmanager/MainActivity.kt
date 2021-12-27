@@ -13,6 +13,9 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.work.*
+import com.fgm.fgmanager.WorkerManagers.DailyWorker
+import com.fgm.fgmanager.WorkerManagers.UploadWorker
 
 import com.fgm.fgmanager.placeholder.PlaceholderContent
 import com.fgm.fgmanager.placeholder.PlaceholderContent.ITEMS
@@ -20,19 +23,24 @@ import com.google.firebase.database.*
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
+import java.util.*
+import java.util.concurrent.TimeUnit
 
 val database = FirebaseDatabase.getInstance()
 val myRef = database.getReference(STORAGE.FireBasePath)
 val NOTIFICATION_ID = 101
 val CHANNEL_ID = "channelID"
+val KEY_COUNT_VALUE = "key_count"
 
 class MainActivity : AppCompatActivity() {
     //*************************************
-    //  -Added SQL db For Name Saved
-    //  - Added New Log in with Firebase Store
-    //  -Added Notification Push
-    //  -Added DBHelper for LogIn. Save User
-    //  -Added Logo fg
+    //  -Added DailyWorker - Worker request - Foreground
+    // - Set Notification on 10 o`clock
+    // - Added New Login fun with Fire Store
+    // - Added New fun Create Data Base with Fire Store
+    // - Added New fun AddItem with Fire Store
+    // - Add New fun deleteItem
+    // - Fix fun SetExistNameToEditTextNameOfProduct
     //*************************************
 
     //val CAMERA_RQ = 102
@@ -44,11 +52,17 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.hide()
         createNotificationChannel()//зарегистрировать канал уведомлений, Вызвать при запуске приложения
 
+        setDailyWorker()
+        //SetOneTimeWorkerRequest()
+        //setPeriodicWorkRequest()
+
 //        notificationDate("product : String")
 //        mActivity.notificationDate(username) //notification
 //        CreateFireDB()
         //deleteFireBaseItem()
-        //Log.d(TAG, "Activity back pressed invoked")
+
+        //var currentDate = Calendar.getInstance()
+        //Log.d("TAG", "Activity ${currentDate.time}")
         //val database = FirebaseDatabase.getInstance()
         //val myRef = database.getReference(STORAGE.FireBasePath)
         //onChangeListener(myRef)
@@ -57,6 +71,44 @@ class MainActivity : AppCompatActivity() {
 
     }
     //**************************************************************************************************
+    fun setDailyWorker(){
+        var currentDate = Calendar.getInstance()
+        val dueDate = Calendar.getInstance()
+// Set Execution around 24:00:00 AM
+        dueDate.set(Calendar.HOUR_OF_DAY, 10)
+        dueDate.set(Calendar.MINUTE, 0)
+        dueDate.set(Calendar.SECOND, 0)
+        if (dueDate.before(currentDate)) {
+            dueDate.add(Calendar.HOUR_OF_DAY, 24)
+        }
+        val timeDiff = dueDate.timeInMillis - currentDate.timeInMillis
+        val dailyWorkRequest = OneTimeWorkRequestBuilder<DailyWorker>()
+            .setInitialDelay(timeDiff, TimeUnit.MILLISECONDS)
+            .addTag("send_reminder_periodic")
+            .build()
+        WorkManager.getInstance(this).enqueue(dailyWorkRequest)
+    }
+
+    fun setPeriodicWorkRequest(){
+        val periodicWorkRequest : WorkRequest = PeriodicWorkRequestBuilder<UploadWorker>(1, TimeUnit.DAYS)
+            .build()
+        val workManager = WorkManager.getInstance(this).enqueue(periodicWorkRequest)
+    }
+
+    fun SetOneTimeWorkerRequest(){ //Background Working
+//        val data : Data = Data.Builder()
+//            .putInt(KEY_COUNT_VALUE, 125)
+//            .build()
+        val constraints = Constraints.Builder()
+        .build()
+        //setInputData(data)
+        val uploadWorkRequest: WorkRequest =
+            OneTimeWorkRequestBuilder<UploadWorker>()
+                .setConstraints(constraints)
+                .build()
+        val workManager = WorkManager.getInstance(this).enqueue(uploadWorkRequest)
+    }
+
     fun notificationDate(product : String){
         // Create an explicit intent for an Activity in your app
         val intent = Intent(this, MainActivity::class.java).apply {

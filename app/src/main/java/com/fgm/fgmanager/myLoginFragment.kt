@@ -86,8 +86,9 @@ class myLoginFragment : Fragment() {
 
         b_Login.setOnClickListener(){
             if(et_Username.text.toString() != "" && et_Password.text.toString() != ""){
-                loginCloudFS(et_Username.text.toString(), et_Password.text.toString())
+                //loginCloudFS(et_Username.text.toString(), et_Password.text.toString())
                 //login(et_Username.text.toString(), et_Password.text.toString())
+                loginCloudFSMap(et_Username.text.toString(), et_Password.text.toString())
             }else {
                 if(et_Username.text.toString() == "") {
                     et_Username.setError("Fill the gap")
@@ -152,9 +153,10 @@ class myLoginFragment : Fragment() {
     }
 
     fun freeLogin(){
-        val mActivity : MainActivity = activity as MainActivity
-        val tv_Users = mActivity.findViewById<TextView>(R.id.tv_User)
-        tv_Users.setText("Free account")
+//        val mActivity : MainActivity = activity as MainActivity
+//        val tv_Users = mActivity.findViewById<TextView>(R.id.tv_User)
+//        tv_Users.setText("Free account")
+        STORAGE.UserName = "Free account"
         STORAGE.TypeAccFree = false
         Navigation.findNavController(this.requireView()).navigate(R.id.action_myLoginFragment_to_itemFragment)
     }
@@ -169,7 +171,7 @@ class myLoginFragment : Fragment() {
             val docRef = db.collection("Admin").document(username)
             docRef.get()
                 .addOnSuccessListener { document ->
-                    if (document != null && document.get("User") == username) { //password ADD
+                    if (document != null && document.get("User") == username) { //password ADD  && document.get("User") == username
                         //Log.d("TAG", "DocumentSnapshot data: ${document.data}")
                         dbSaveLogin.addUser(username, password)
                         progressBar.visibility = View.VISIBLE
@@ -197,9 +199,58 @@ class myLoginFragment : Fragment() {
         if(cursor.count != 0) {
             var userName = cursor.getString(cursor.getColumnIndex(DBHelperLogIn.USER_NAME)).toString()
             var password = cursor.getString(cursor.getColumnIndex(DBHelperLogIn.USER_PAS)).toString()
-            loginCloudFS(userName, password)
+            loginCloudFSMap(userName, password)
         }
         cursor.close()
+    }
+
+    fun loginCloudFSMap(username: String, password: String) {
+        val dbSaveLogin = DBHelperLogIn(requireContext(), null)
+        val dbFSLogin = Firebase.firestore
+        val mActivity: MainActivity = activity as MainActivity
+//        val tv_Users = mActivity.findViewById<TextView>(R.id.tv_User)
+        val progressBar = mActivity.findViewById<ProgressBar>(R.id.progressBar)
+        if (username != "" && password != "") {
+
+            //Add new Item in Firestore
+//            val u = User("Product001", "123")  //Create User
+//            val user1 = mapOf<String, User>("Product" to u) //Create Map for sending
+//            val resultNameOfCollection = username.split("0")[0] //Delete Number of Users from end of the line
+//            db.collection(resultNameOfCollection).document("Users")   //Создаёт Новый Документ. Set Стирает данные документа и перезаписывает данные
+//                .set(user1, SetOptions.merge()) // Без SetOptions.merge(), Set перезапишет данные
+//                .addOnSuccessListener { Log.d("TAG", "DocumentSnapshot successfully written!") }
+//                .addOnFailureListener { e -> Log.w("TAG", "Error writing document", e) }
+
+            //username Is username for Log In what we receive from EditText
+            //resultNameOfCollection Is Name OF Main Collection
+            val resultNameOfCollection = username.split("0")[0] //Delete Number of Users from end of the line
+            val docRef = dbFSLogin.collection(resultNameOfCollection).document("Users")
+            docRef.get()
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        // Document found in the offline cache
+                        val document = task.result
+                        if (document != null && document.exists()) {
+                            val users: Map<String, String> =
+                                document?.get(username) as Map<String, String>
+                            if (users.get("User") == username && users.get("Password") == password) { //Authentication
+                                dbSaveLogin.addUser(username, password)
+                                progressBar.visibility = View.VISIBLE
+                                STORAGE.TypeAccFree = true
+                                STORAGE.UserName = username
+//                            tv_Users.setText(STORAGE.UserName)
+                                Navigation.findNavController(this.requireView())
+                                    .navigate(R.id.action_myLoginFragment_to_itemFragment)
+                            }
+                            //Log.d("TAG", "Cached document data: ${users.get("Password")}")
+                        }else{
+                            Toast.makeText(context, "Неверный Логин или Пароль", Toast.LENGTH_SHORT).show()
+                        }
+                    }else {
+                        Log.d("TAG", "Cached get failed: ", task.exception)
+                    }
+                }
+        }
     }
         //**
 

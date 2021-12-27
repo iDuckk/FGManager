@@ -19,6 +19,10 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.SetOptions
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import java.util.ArrayList
 
 /**
@@ -132,8 +136,9 @@ class MyItemRecyclerViewAdapter(
                     .setPositiveButton("Да") {       //When click "Yes"
                             dialog, id ->
                         if(STORAGE.TypeAccFree) {
-                            myRef.child(values[position].keyProduct)
-                                .removeValue()          //Delete Item
+//                            myRef.child(values[position].keyProduct)
+//                                .removeValue()          //Delete Item
+                            deleteFromFireStoreDB(position)
                             //Log.d("TAG", values[position].keyProduct)
                         }else{
                             val db = DBHelper(par!!,null)
@@ -148,5 +153,23 @@ class MyItemRecyclerViewAdapter(
                     .create()
             dialog.show()
         }
+    }
+    fun deleteFromFireStoreDB(position : Int){
+        val dbFSDelete = Firebase.firestore
+        //Add new Item in Firestore
+        //val user = mapOf<String, PlaceholderContent.PlaceholderItem>(NameOfMapProd.toString() to item) //Create Map for sending
+        val resultNameOfCollection = STORAGE.UserName.split("0")[0] //Delete Number of Users from end of the line
+        val docRef = dbFSDelete.collection(resultNameOfCollection).document("DataBase")
+        // Remove the 'Item with number of keyProduct' field from the document
+        val updates = hashMapOf<String, Any>(
+            "${(values[position].keyProduct)}" to FieldValue.delete()
+        )
+        docRef.update(updates).addOnCompleteListener { }
+        //Log.d("TAG", "Key product from MYRV fun delete${values[position].keyProduct}")
+        docRef.update(updates).addOnCompleteListener { }
+
+//            .delete()
+//            .addOnSuccessListener { Log.d("TAG", "DocumentSnapshot successfully deleted!") }
+//            .addOnFailureListener { e -> Log.w("TAG", "Error deleting document", e) }
     }
 }

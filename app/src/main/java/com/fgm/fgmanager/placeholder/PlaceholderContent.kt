@@ -68,7 +68,8 @@ object PlaceholderContent {
     /**
      * A placeholder item representing a piece of content.
      */
-    data class PlaceholderItem(var productName: String = "", val productBarcode: String = "", val productDate: String = "", var amountDays: String = "", var keyProduct: String = "", var numberForSorting : Int = 0) { //val id: String, val content: String, val details: String
+    data class PlaceholderItem(var productName: String = "", val productBarcode: String = "", val productDate: String = "", var amountDays: String = "",
+                               var keyProduct: String = "", var numberForSorting: Int = 0) { //val id: String, val content: String, val details: String
         //override fun toString(): String = content
     }
 }

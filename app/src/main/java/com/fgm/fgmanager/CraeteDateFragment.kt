@@ -1,6 +1,7 @@
 package com.fgm.fgmanager
 
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -8,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.navigation.Navigation
@@ -18,9 +20,10 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import java.time.LocalDate
-import java.time.temporal.ChronoUnit
-import java.util.ArrayList
+import com.google.firebase.firestore.SetOptions
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+import java.util.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -59,11 +62,12 @@ class CraeteDateFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_craete_date, container, false)
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         val bundle = Bundle()
-        val arrayOfSaveprod = CreateFireDBForSaveProduct() //Receive database ofName Of products for fill TextEdit Name
+        val arrayOfSaveprod = CreateDBForSaveProduct() //Receive database ofName Of products for fill TextEdit Name
 
         val et_NameProduct = view.findViewById<EditText>(R.id.et_Name)
         val et_Barcode = view.findViewById<EditText>(R.id.et_Barcode)
@@ -127,29 +131,49 @@ class CraeteDateFragment : Fragment() {
             if(et_NameProduct.text.toString() != "" && et_Barcode.text.toString() != ""&& tv_Date.text.toString() != ""
                 && amountDays.toString() != "" && amountDays!!.toInt() > 0) {
             //Add new Name of Product
-                if(STORAGE.TypeAccFree) {                                                                      //FIRE DATA BASE
-                    for (i in 0..arrayOfSaveprod.lastIndex) // arrayOfSaveprod.lastIndex - amount of SaveProductNameDB
-                        if (et_Barcode.text.toString() != arrayOfSaveprod[i].productBarcode) {
-                            STORAGE.booleanForCheckExistsOfNameOfProducts =
-                                true //If new name doesn't exist
+                if(STORAGE.TypeAccFree) {
+                    arrayOfSaveprod.forEach { row -> if (et_Barcode.text.toString() != row.productBarcode) {
+                        STORAGE.booleanForCheckExistsOfNameOfProducts = true //If new name doesn't exist
                         }
+                        //Log.d("TAG", "arrayOfSaveprod = ${row.productBarcode}")
+                    }
+//                        for (i in 0..arrayOfSaveprod.lastIndex) { // arrayOfSaveprod.lastIndex - amount of SaveProductNameDB
+//                            if (et_Barcode.text.toString() != arrayOfSaveprod[i].productBarcode) {
+//                                STORAGE.booleanForCheckExistsOfNameOfProducts =
+//                                    true //If new name doesn't exist
+//                                //Log.d("TAG", "arrayOfSaveprod = ${arrayOfSaveprod[i].productBarcode}")
+//                            }
+//                        }
+
+
                     if (STORAGE.booleanForCheckExistsOfNameOfProducts) { //add new Name product to ProductDB
-                        myRef.push().setValue(
-                            SaveProductNameDB(
+//                        myRef.push().setValue(
+//                            SaveProductNameDB(
+//                                et_NameProduct.text.toString(),
+//                                et_Barcode.text.toString()
+//                            )
+//                        )
+                        addItemSavedName(SaveProductNameDB(
                                 et_NameProduct.text.toString(),
-                                et_Barcode.text.toString()
-                            )
-                        )
+                                et_Barcode.text.toString()))
                         STORAGE.booleanForCheckExistsOfNameOfProducts = false
                     }
                     //add arguments in array for create new Items
-                    val arrayOfTitle: ArrayList<String> = ArrayList()
-                    arrayOfTitle += et_NameProduct.text.toString()
-                    arrayOfTitle += et_Barcode.text.toString()
-                    arrayOfTitle += tv_Date.text.toString()
-                    arrayOfTitle += amountDays
-                    //Send array to ItemActivity, I do it because I need refresh immediately RecycleView
-                    bundle.putStringArrayList("NameProductForFirebase", arrayOfTitle)
+//                    val arrayOfTitle: ArrayList<String> = ArrayList()
+//                    arrayOfTitle += et_NameProduct.text.toString()
+//                    arrayOfTitle += et_Barcode.text.toString()
+//                    arrayOfTitle += tv_Date.text.toString()
+//                    arrayOfTitle += amountDays
+//                    //arrayOfTitle += (PlaceholderContent.ITEMS.size + 1).toString()
+//                    //Send array to ItemActivity, I do it because I need refresh immediately RecycleView
+//                    bundle.putStringArrayList("NameProductForFirebase", arrayOfTitle)
+
+                    addItemsForFireStoreDB(PlaceholderContent.PlaceholderItem(
+                        et_NameProduct.text.toString(),
+                        et_Barcode.text.toString(),
+                        tv_Date.text.toString(),
+                        amountDays,
+                        "0"))
                 }else{
 //                    Log.d("TAG", "Add Inside of cheching")
                     //LOCAL DATA BASE if Free account
@@ -305,11 +329,19 @@ class CraeteDateFragment : Fragment() {
 
     fun SetExistNameToEditTextNameOfProduct(name : String, arrayOfSaveProduct: ArrayList<SaveProductNameDB>) : String {
         var strName : String = ""
-        for (i in 0..arrayOfSaveProduct.lastIndex) { // arrayOfSaveprod.lastIndex - amount of SaveProductNameDB
-            if (name == arrayOfSaveProduct[i].productBarcode) {
-                strName = arrayOfSaveProduct[i].productName.toString()
-            } else strName = ""
+
+        arrayOfSaveProduct.forEach { row ->
+            Log.d("TAG", "SetExistName = ${name} == ${row.productBarcode}")
+            if (name == row.productBarcode) {
+                return row.productName.toString()
+            }else strName = ""
         }
+
+//        for (i in 0..arrayOfSaveProduct.lastIndex) { // arrayOfSaveprod.lastIndex - amount of SaveProductNameDB
+//            if (name == arrayOfSaveProduct[i].productBarcode) {
+//                strName = arrayOfSaveProduct[i].productName.toString()
+//            } else strName = ""
+//        }
         return strName
     }
 
@@ -355,5 +387,110 @@ class CraeteDateFragment : Fragment() {
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
+    fun CreateDBForSaveProduct() : ArrayList<SaveProductNameDB> {
+        var arrayOfSaveProducts: ArrayList<SaveProductNameDB> = ArrayList()
+        if(STORAGE.TypeAccFree) {
+//            myRef.addValueEventListener(object : ValueEventListener {
+//                override fun onDataChange(snapshot: DataSnapshot) {
+//                    if (arrayOfSaveProducts.size > 0) arrayOfSaveProducts.clear() //IF ArrayList doesn't empty
+//                    for (ds: DataSnapshot in snapshot.children) //Get All children from FireBase
+//                    {
+//                        val item =
+//                            ds.getValue(SaveProductNameDB::class.java)  //Take ONE item
+//                        if (item != null) {
+//                            arrayOfSaveProducts.add(item)   //Add item
+////                        Log.d("TAG", item.productName)
+//                        }
+//                    }
+//                }
+//
+//                override fun onCancelled(error: DatabaseError) {
+//                    TODO("Not yet implemented")
+//                }
+//
+//            })
+//            return arrayOfSaveProducts
+            return CreateFireStoreDBofSavedName() //Create FireStore DB
+        }else{
+            return CreateLocalDBForSavedNames() // It Free Account
+        }
+    }
+    fun addItemSavedName(item : SaveProductNameDB){
+        val dbFSSaveName = Firebase.firestore
+        var currentDate = Calendar.getInstance() //For Unics name of Field
+        //Add new Item in Firestore NameDataBase
+        val user = mapOf<String, SaveProductNameDB>(currentDate.time.toString().trim() to item) //Create Map for sending
+        val resultNameOfCollection = STORAGE.UserName.split("0")[0] //Delete Number of Users from end of the line
+        dbFSSaveName.collection(resultNameOfCollection).document("NameDataBase")   //Создаёт Новый Документ. Set Стирает данные документа и перезаписывает данные
+            .set(user, SetOptions.merge()) // Без SetOptions.merge(), Set перезапишет данные
+            .addOnSuccessListener { Log.d("TAG", "DocumentSnapshot successfully written!") }
+            .addOnFailureListener { e -> Log.w("TAG", "Error writing document", e) }
+    }
+
+        @RequiresApi(Build.VERSION_CODES.N)
+        fun CreateFireStoreDBofSavedName() : ArrayList<SaveProductNameDB> {
+            val dbFSNameCeate = Firebase.firestore
+            var arrayOfSaveProducts: ArrayList<SaveProductNameDB> = ArrayList()
+            val resultNameOfCollection = STORAGE.UserName.split("0")[0] //Delete Number of Users from end of the line
+            //resultNameOfCollection Is Name OF Main Collection
+            val docRef = dbFSNameCeate.collection(resultNameOfCollection).document("NameDataBase")
+            docRef.addSnapshotListener() { snapshot, e -> //MetadataChanges.INCLUDE
+                if (e != null) {
+                    Log.w("TAG", "Listen failed.", e)
+                    return@addSnapshotListener
+                }
+
+                val source = if (snapshot != null && snapshot.metadata.hasPendingWrites())
+                    "Local"
+                else
+                    "Server"
+
+                if (snapshot != null && snapshot.exists()) {
+                    val data = snapshot.data as Map<String, MutableMap<String, String>>
+                    //Log.d("TAG", "DATASIZE ${(data.size)}")
+                    if(arrayOfSaveProducts.size > 0) arrayOfSaveProducts.clear() //CLear up ItemsList.
+                    data.forEach { t, u ->      //Add Items in Array for each
+                        arrayOfSaveProducts.add(
+                            SaveProductNameDB(
+                                "${u!!.get("productName")}",
+                                "${u!!.get("productBarcode")}",
+                            )
+                        )
+                        Log.d("TAG", "Createa ArrayName = ${u!!.get("productName")}  $t")
+                    }
+
+//                    for (i in 0 .. (data.size-1)) {
+//                        if (data.get("$i") != null) {
+//                            //Log.d("TAG", "${(data.size)}++++$i == ${data.get("0")!!.get("productName")}")
+//                            //Log.d("TAG", "${arrayOfSaveProducts.lastIndex} ========= ${data.get("$i")!!.get("productName")}")
+//                            arrayOfSaveProducts.add(
+//                                SaveProductNameDB(
+//                                    "${data.get("$i")!!.get("productName")}",
+//                                    "${data.get("$i")!!.get("productBarcode")}"
+//                                )
+//                            )
+////                            Log.d("TAG", "${(data.size)}++++$i == ${data.get("1")!!.get("productName")}")
+//                        }
+//                    }
+                } else {
+                    Log.d("TAG", "$source data: null")
+                }
+            }
+            return arrayOfSaveProducts
+        }
+
+    fun addItemsForFireStoreDB(item : PlaceholderContent.PlaceholderItem){
+        val dbFSName = Firebase.firestore
+        var currentDate = Calendar.getInstance() //For Unics name of Field
+        //Add new
+        item.keyProduct = currentDate.time.toString().trim()
+        val user = mapOf<String, PlaceholderContent.PlaceholderItem>(currentDate.time.toString().trim() to item) //Create Map for sending NameOfMapProd.toString()
+        val resultNameOfCollection = STORAGE.UserName.split("0")[0] //Delete Number of Users from end of the line
+        dbFSName.collection(resultNameOfCollection).document("DataBase")   //Создаёт Новый Документ. Set Стирает данные документа и перезаписывает данные
+            .set(user, SetOptions.merge()) // Без SetOptions.merge(), Set перезапишет данные
+            .addOnSuccessListener { Log.d("TAG", "DocumentSnapshot successfully written!") }
+            .addOnFailureListener { e -> Log.w("TAG", "Error writing document", e) }
+    }
 
 }
