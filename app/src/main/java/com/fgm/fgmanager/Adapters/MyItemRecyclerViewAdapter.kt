@@ -1,8 +1,7 @@
-package com.fgm.fgmanager
+package com.fgm.fgmanager.Adapters
 
 import android.app.AlertDialog
 import android.content.Context
-import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -11,19 +10,13 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.navigation.Navigation
 import com.fgm.fgmanager.DBHelpers.DBHelper
-
-import com.fgm.fgmanager.placeholder.PlaceholderContent.PlaceholderItem
+import com.fgm.fgmanager.PoJo.placeholder.PlaceholderContent.PlaceholderItem
+import com.fgm.fgmanager.R
+import com.fgm.fgmanager.STORAGE
 import com.fgm.fgmanager.databinding.FragmentItemBinding
-import com.fgm.fgmanager.placeholder.PlaceholderContent
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.FieldValue
-import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import java.util.ArrayList
 
 /**
  * [RecyclerView.Adapter] that can display a [PlaceholderItem].

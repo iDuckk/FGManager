@@ -9,38 +9,32 @@ import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.work.*
 import com.fgm.fgmanager.WorkerManagers.DailyWorker
-import com.fgm.fgmanager.WorkerManagers.UploadWorker
+import com.fgm.fgmanager.WorkerManagers.DailyWorkerFSdb
 
-import com.fgm.fgmanager.placeholder.PlaceholderContent
-import com.fgm.fgmanager.placeholder.PlaceholderContent.ITEMS
 import com.google.firebase.database.*
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-import java.time.temporal.ChronoUnit
 import java.util.*
 import java.util.concurrent.TimeUnit
 
 val database = FirebaseDatabase.getInstance()
 val myRef = database.getReference(STORAGE.FireBasePath)
-val NOTIFICATION_ID = 101
-val CHANNEL_ID = "channelID"
+//val NOTIFICATION_ID = 101
+//val CHANNEL_ID = "channelID"
 val KEY_COUNT_VALUE = "key_count"
 
 class MainActivity : AppCompatActivity() {
     //*************************************
-    //  -Added DailyWorker - Worker request - Foreground
-    // - Set Notification on 10 o`clock
-    // - Added New Login fun with Fire Store
-    // - Added New fun Create Data Base with Fire Store
-    // - Added New fun AddItem with Fire Store
-    // - Add New fun deleteItem
-    // - Fix fun SetExistNameToEditTextNameOfProduct
+    // - Add counting Amount of days id CreateFireStore
+    // - Add DailyWorker with notification for Fire Store
+    // - Replace Class in Correct Package, Adapters and Fragments
+    // - Deleted needless Import Class and Values
+    // - Fixed WorkerManagers date notification "Срок истек" instead minus values
+    // - Fix sorting of items in ITEMS. Fire Store
+    // - Fix sorting of items in ITEMS. SQLdb
     //*************************************
 
     //val CAMERA_RQ = 102
@@ -53,8 +47,7 @@ class MainActivity : AppCompatActivity() {
         createNotificationChannel()//зарегистрировать канал уведомлений, Вызвать при запуске приложения
 
         setDailyWorker()
-        //SetOneTimeWorkerRequest()
-        //setPeriodicWorkRequest()
+        setDailyWorkerFSdb()
 
 //        notificationDate("product : String")
 //        mActivity.notificationDate(username) //notification
@@ -71,42 +64,77 @@ class MainActivity : AppCompatActivity() {
 
     }
     //**************************************************************************************************
+//    fun parallelWorkRun(){
+//
+//        WorkManager.getInstance()
+////            .beginWith(Arrays.asList(
+////                setDailyWorker(),
+////                setDailyWorkerFSdb()))
+//////            .then(compressWorkRequest)
+//////            .then(uploadWorkRequest)
+////            .enqueue()
+//    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
     fun setDailyWorker(){
         var currentDate = Calendar.getInstance()
         val dueDate = Calendar.getInstance()
 // Set Execution around 24:00:00 AM
-        dueDate.set(Calendar.HOUR_OF_DAY, 10)
-        dueDate.set(Calendar.MINUTE, 0)
-        dueDate.set(Calendar.SECOND, 0)
+        dueDate.set(Calendar.HOUR_OF_DAY, STORAGE.HOUR)
+        dueDate.set(Calendar.MINUTE, STORAGE.MIN)
+        dueDate.set(Calendar.SECOND, STORAGE.SEC)
         if (dueDate.before(currentDate)) {
             dueDate.add(Calendar.HOUR_OF_DAY, 24)
         }
         val timeDiff = dueDate.timeInMillis - currentDate.timeInMillis
+
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .setRequiresDeviceIdle(true)
+            .build()
+
         val dailyWorkRequest = OneTimeWorkRequestBuilder<DailyWorker>()
             .setInitialDelay(timeDiff, TimeUnit.MILLISECONDS)
-            .addTag("send_reminder_periodic")
+            .setConstraints(constraints)
+            .addTag(STORAGE.ID_DAILYWORKER)
             .build()
         WorkManager.getInstance(this).enqueue(dailyWorkRequest)
     }
 
     fun setPeriodicWorkRequest(){
-        val periodicWorkRequest : WorkRequest = PeriodicWorkRequestBuilder<UploadWorker>(1, TimeUnit.DAYS)
+        val periodicWorkRequest : WorkRequest = PeriodicWorkRequestBuilder<DailyWorkerFSdb>(1, TimeUnit.DAYS)
             .build()
         val workManager = WorkManager.getInstance(this).enqueue(periodicWorkRequest)
     }
 
-    fun SetOneTimeWorkerRequest(){ //Background Working
+    @RequiresApi(Build.VERSION_CODES.M)
+    fun setDailyWorkerFSdb(){ //Background Working
 //        val data : Data = Data.Builder()
 //            .putInt(KEY_COUNT_VALUE, 125)
 //            .build()
+        var currentDate = Calendar.getInstance()
+        val dueDate = Calendar.getInstance()
+// Set Execution around 24:00:00 AM
+        dueDate.set(Calendar.HOUR_OF_DAY, STORAGE.HOUR)
+        dueDate.set(Calendar.MINUTE, STORAGE.MIN)
+        dueDate.set(Calendar.SECOND, STORAGE.SEC)
+        if (dueDate.before(currentDate)) {
+            dueDate.add(Calendar.HOUR_OF_DAY, 24)
+        }
+        val timeDiff = dueDate.timeInMillis - currentDate.timeInMillis
+
         val constraints = Constraints.Builder()
-        .build()
-        //setInputData(data)
-        val uploadWorkRequest: WorkRequest =
-            OneTimeWorkRequestBuilder<UploadWorker>()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .setRequiresDeviceIdle(true)
+            .build()
+//        //setInputData(data)
+
+        val dailyWorkFSdbRequest = OneTimeWorkRequestBuilder<DailyWorkerFSdb>()
+                .setInitialDelay(timeDiff, TimeUnit.MILLISECONDS)
                 .setConstraints(constraints)
-                .build()
-        val workManager = WorkManager.getInstance(this).enqueue(uploadWorkRequest)
+                .addTag(STORAGE.ID_DAILYWORKERFS)
+                .build() //                .setConstraints(constraints)
+        WorkManager.getInstance(this).enqueue(dailyWorkFSdbRequest)
     }
 
     fun notificationDate(product : String){
@@ -116,7 +144,7 @@ class MainActivity : AppCompatActivity() {
         }
         val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
 
-        val builder = NotificationCompat.Builder(this, CHANNEL_ID)
+        val builder = NotificationCompat.Builder(this, STORAGE.CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_logo_fg_128)
             .setContentTitle(getString(R.string.Notification))
             .setContentText(product)
@@ -127,7 +155,7 @@ class MainActivity : AppCompatActivity() {
 
         with(NotificationManagerCompat.from(this)) {
             // notificationId is a unique int for each notification that you must define
-            notify(NOTIFICATION_ID, builder.build())
+            notify(STORAGE.NOTIFICATION_ID, builder.build())
         }
     }
 
@@ -138,7 +166,7 @@ class MainActivity : AppCompatActivity() {
             val name = "nameChanel"
             val descriptionText = "description"
             val importance = NotificationManager.IMPORTANCE_DEFAULT
-            val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
+            val channel = NotificationChannel(STORAGE.CHANNEL_ID, name, importance).apply {
                 description = descriptionText
             }
             // Register the channel with the system

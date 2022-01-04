@@ -1,4 +1,4 @@
-package com.fgm.fgmanager
+package com.fgm.fgmanager.Fragments
 
 import android.os.Build
 import android.os.Bundle
@@ -9,9 +9,9 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.CalendarView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.navigation.Navigation
+import com.fgm.fgmanager.R
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit

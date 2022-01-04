@@ -1,4 +1,4 @@
-package com.fgm.fgmanager
+package com.fgm.fgmanager.Fragments
 
 import android.app.AlertDialog
 import android.os.Build
@@ -16,13 +16,14 @@ import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
 import androidx.navigation.Navigation
+import com.fgm.fgmanager.*
+import com.fgm.fgmanager.Adapters.MyItemRecyclerViewAdapter
 import com.fgm.fgmanager.DBHelpers.DBHelper
 import com.fgm.fgmanager.DBHelpers.DBHelperLogIn
-import com.fgm.fgmanager.placeholder.PlaceholderContent
+import com.fgm.fgmanager.PoJo.placeholder.PlaceholderContent
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import java.time.LocalDate
@@ -255,6 +256,8 @@ class ItemFragment : Fragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun CreateLocalDataBase(RecView : RecyclerView) {
+        var countedAmountDay: String = "0"
+        var numOfSorting: Int = 0
         val formatter: DateTimeFormatter =
             DateTimeFormatter.ofPattern("d/M/yyyy")  //Format for Date
         val value = LocalDate.now().format(formatter) // Current Date
@@ -286,12 +289,13 @@ class ItemFragment : Fragment() {
                 ) //Date of Product
             val numberOfDays = ChronoUnit.DAYS.between(parseDateNow, parseDateItem)
                 .toString() //Amount of days
-            var countedAmountDay: String = "0"
+
             if (numberOfDays.toInt() > 0) { // If amount Of days lower then Zero
                 countedAmountDay = numberOfDays
             } else {
                 countedAmountDay = ""
             }
+            if (numberOfDays.toInt() > 0) numOfSorting = numberOfDays.toInt() else numOfSorting = 0 // If amount Of days lower then Zero for num of Sorting
             PlaceholderContent.ITEMS.clear()
             PlaceholderContent.ITEMS.add(
                 PlaceholderContent.PlaceholderItem(
@@ -300,7 +304,7 @@ class ItemFragment : Fragment() {
                     cursor.getString(cursor.getColumnIndex(DBHelper.PRODUCT_DATE)).toString(),
                     countedAmountDay, //cursor.getString(cursor.getColumnIndex(DBHelper.PRODUCT_AMOUT_DAYS)).toString()
                     cursor.getString(cursor.getColumnIndex(DBHelper.ID_COL)).toString(),
-                    0
+                    numOfSorting
                 )
             )
 //        Name.append(cursor.getString(cursor.getColumnIndex(DBHelper.NAME_COl)) + "\n")
@@ -323,6 +327,7 @@ class ItemFragment : Fragment() {
             else {
                 countedAmountDay = ""
             }
+            if (numberOfDays.toInt() > 0) numOfSorting = numberOfDays.toInt() else numOfSorting = 0 // If amount Of days lower then Zero for num of Sorting
             //Log.d("TAG","ItemFr Create {$cursor.getString(cursor.getColumnIndex(DBHelper.ID_COL)).toString()}")
                 PlaceholderContent.ITEMS.add(
                     PlaceholderContent.PlaceholderItem(
@@ -333,7 +338,7 @@ class ItemFragment : Fragment() {
                         countedAmountDay,
                         cursor.getString(cursor.getColumnIndex(DBHelper.ID_COL))
                             .toString(), //cursor.getString(cursor.getColumnIndex(DBHelper.ID_COL)).toString()
-                        0
+                        numOfSorting
                     )
                 )
 //            Name.append(cursor.getString(cursor.getColumnIndex(DBHelper.NAME_COl)) + "\n")
@@ -342,7 +347,7 @@ class ItemFragment : Fragment() {
 
             // at last we close our cursor
             cursor.close()
-            PlaceholderContent.ITEMS.sortBy { it.amountDays } // Sorting of List
+            PlaceholderContent.ITEMS.sortBy { it.numberForSorting } // Sorting of List
             RecView.adapter?.notifyItemInserted(PlaceholderContent.ITEMS.lastIndex)    // If change, Reload Recycler View
         }else{
             PlaceholderContent.ITEMS.clear()
@@ -354,6 +359,8 @@ class ItemFragment : Fragment() {
         val dbFS = Firebase.firestore
         //val database = FirebaseDatabase.getInstance()
         //val myRef = database.getReference(STORAGE.FireBasePath)
+        var countedAmountDay: String = "0"
+        var numOfSorting: Int = 0
         val localITEMS: MutableList<PlaceholderContent.PlaceholderItem> = ArrayList()
         val mActivity : MainActivity = activity as MainActivity
         val progressBar = mActivity.findViewById<ProgressBar>(R.id.progressBar)
@@ -388,15 +395,27 @@ class ItemFragment : Fragment() {
 //                val itemData = data["1"].toString()
 //                Log.d("TAG", "ItemF Create FS ${(data.size)}++++ ${snapshot.data} =!= ${data} =/n ItemData + $itemData")
 
+
+//                if (numberOfDays.toInt() > 0) { // If amount Of days lower then Zero
+//                    countedAmountDay = numberOfDays
+//                } else {
+//                    countedAmountDay = ""
+//                }
+
                 data.forEach { t, u ->          //Add Items in Array for each
+                    //Log.d("TAG", "ItemF Create FS ${data.get("productDate").toString()}")
+                    val parseDateItem =LocalDate.parse("${u!!.get("productDate")}".toString(),formatter) //Date of Product
+                    val numberOfDays = ChronoUnit.DAYS.between(parseDateNow, parseDateItem)
+                    if (numberOfDays.toInt() > 0) countedAmountDay = numberOfDays.toString() else countedAmountDay = "" // If amount Of days lower then Zero
+                    if (numberOfDays.toInt() > 0) numOfSorting = numberOfDays.toInt() else numOfSorting = 0 // If amount Of days lower then Zero for num of Sorting
                             PlaceholderContent.ITEMS.add(
                             PlaceholderContent.PlaceholderItem(
                                 "${u!!.get("productName")}",
                                 "${u!!.get("productBarcode")}",
                                 "${u!!.get("productDate")}",
-                                "${u!!.get("amountDays")}",
+                                countedAmountDay,//"${u!!.get("amountDays")}"
                                 "${u!!.get("keyProduct")}",
-                                u!!.get("amountDays")!!.toInt()
+                                numOfSorting
                             )
                         )
                 }
@@ -427,6 +446,10 @@ class ItemFragment : Fragment() {
             //Log.d("TAG", "${PlaceholderContent.ITEMS.size}")
             PlaceholderContent.ITEMS.sortBy { it.numberForSorting } // Sorting of List
             RecView.adapter?.notifyDataSetChanged()    // If change, Reload Recycler View
+            //RecView.adapter?.notifyItemInserted(PlaceholderContent.ITEMS.lastIndex)
+
+//            var prevSize : Int = PlaceholderContent.ITEMS.size
+//            RecView.adapter?.notifyItemRangeChanged(prevSize, PlaceholderContent.ITEMS.size)
             progressBar.visibility = View.INVISIBLE
         }
 

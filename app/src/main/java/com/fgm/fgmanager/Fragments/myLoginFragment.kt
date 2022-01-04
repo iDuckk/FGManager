@@ -1,4 +1,4 @@
-package com.fgm.fgmanager
+package com.fgm.fgmanager.Fragments
 
 import android.content.res.ColorStateList
 import android.os.Bundle
@@ -12,6 +12,9 @@ import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.navigation.Navigation
 import com.fgm.fgmanager.DBHelpers.DBHelperLogIn
+import com.fgm.fgmanager.MainActivity
+import com.fgm.fgmanager.R
+import com.fgm.fgmanager.STORAGE
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
@@ -82,6 +85,7 @@ class myLoginFragment : Fragment() {
                 }
             }
         )
+
         isNotFirstLogIn() // If we logged yet
 
         b_Login.setOnClickListener(){
@@ -195,7 +199,6 @@ class myLoginFragment : Fragment() {
         var password : String
         val cursor = dbSaveLogin.getUser()
         cursor!!.moveToFirst()
-
         if(cursor.count != 0) {
             var userName = cursor.getString(cursor.getColumnIndex(DBHelperLogIn.USER_NAME)).toString()
             var password = cursor.getString(cursor.getColumnIndex(DBHelperLogIn.USER_PAS)).toString()
@@ -252,6 +255,7 @@ class myLoginFragment : Fragment() {
                 }
         }
     }
+
         //**
 
 //            .addOnSuccessListener { result ->

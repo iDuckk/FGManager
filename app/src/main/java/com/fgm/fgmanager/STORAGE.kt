@@ -1,10 +1,5 @@
 package com.fgm.fgmanager
 
-import android.widget.LinearLayout
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.fgm.fgmanager.placeholder.PlaceholderContent
-import java.util.ArrayList
-
 class STORAGE {
     companion object{
         var NameEdit = ""
@@ -27,6 +22,25 @@ class STORAGE {
 
         //Store Data Base
         var UserName = ""
+
+        //DailyWorkers
+        val HOUR : Int = 10
+        val MIN : Int = 0
+        val SEC : Int = 0
+
+        //Notification
+        val NOTIFICATION_ID = 101
+        val CHANNEL_ID = "channelID"
+
+        //dailyWorkerFS
+        val ID_DAILYWORKERFS = "send_reminder_periodic_FS"
+        val GROUP_KEY_WORK_FS = "Group_of_Daily_WorkerFS"
+        val NOTIFICATION_ID_DAILYWORKER_FS = 10
+
+        //dailyWorker
+        val ID_DAILYWORKER = "send_reminder_periodic"
+        val GROUP_KEY_WORK = "Group of Daily Worker"
+        val NOTIFICATION_ID_DAILYWORKER = 11
 
     }
 }

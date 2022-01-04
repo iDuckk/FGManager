@@ -1,4 +1,4 @@
-package com.fgm.fgmanager
+package com.fgm.fgmanager.Fragments
 
 import android.content.pm.PackageManager
 import android.os.Build
@@ -15,7 +15,11 @@ import androidx.core.content.ContextCompat
 import androidx.navigation.Navigation
 import com.fgm.fgmanager.DBHelpers.DBHelper
 import com.fgm.fgmanager.DBHelpers.DBHelperForSavedName
-import com.fgm.fgmanager.placeholder.PlaceholderContent
+import com.fgm.fgmanager.MainActivity
+import com.fgm.fgmanager.R
+import com.fgm.fgmanager.STORAGE
+import com.fgm.fgmanager.PoJo.SaveProductNameDB
+import com.fgm.fgmanager.PoJo.placeholder.PlaceholderContent
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -153,9 +157,11 @@ class CraeteDateFragment : Fragment() {
 //                                et_Barcode.text.toString()
 //                            )
 //                        )
-                        addItemSavedName(SaveProductNameDB(
+                        addItemSavedName(
+                            SaveProductNameDB(
                                 et_NameProduct.text.toString(),
-                                et_Barcode.text.toString()))
+                                et_Barcode.text.toString())
+                        )
                         STORAGE.booleanForCheckExistsOfNameOfProducts = false
                     }
                     //add arguments in array for create new Items
@@ -168,7 +174,8 @@ class CraeteDateFragment : Fragment() {
 //                    //Send array to ItemActivity, I do it because I need refresh immediately RecycleView
 //                    bundle.putStringArrayList("NameProductForFirebase", arrayOfTitle)
 
-                    addItemsForFireStoreDB(PlaceholderContent.PlaceholderItem(
+                    addItemsForFireStoreDB(
+                        PlaceholderContent.PlaceholderItem(
                         et_NameProduct.text.toString(),
                         et_Barcode.text.toString(),
                         tv_Date.text.toString(),
@@ -331,7 +338,7 @@ class CraeteDateFragment : Fragment() {
         var strName : String = ""
 
         arrayOfSaveProduct.forEach { row ->
-            Log.d("TAG", "SetExistName = ${name} == ${row.productBarcode}")
+            //Log.d("TAG", "SetExistName = ${name} == ${row.productBarcode}")
             if (name == row.productBarcode) {
                 return row.productName.toString()
             }else strName = ""
@@ -457,7 +464,7 @@ class CraeteDateFragment : Fragment() {
                                 "${u!!.get("productBarcode")}",
                             )
                         )
-                        Log.d("TAG", "Createa ArrayName = ${u!!.get("productName")}  $t")
+                        //Log.d("TAG", "Createa ArrayName = ${u!!.get("productName")}  $t")
                     }
 
 //                    for (i in 0 .. (data.size-1)) {
