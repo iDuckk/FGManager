@@ -15,6 +15,7 @@ import com.fgm.fgmanager.DBHelpers.DBHelperLogIn
 import com.fgm.fgmanager.MainActivity
 import com.fgm.fgmanager.R
 import com.fgm.fgmanager.STORAGE
+import com.google.android.gms.ads.AdView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
@@ -65,6 +66,7 @@ class myLoginFragment : Fragment() {
         val et_Password = view.findViewById<EditText>(R.id.password)
         val b_Login = view.findViewById<Button>(R.id.login)
         val b_FreeLogin = view.findViewById<Button>(R.id.b_FreeLogin)
+        val tv_Registration = view.findViewById<TextView>(R.id.tv_Registration)
 
         //Take of Menu Bar
         val mActivity : MainActivity = activity as MainActivity
@@ -72,6 +74,10 @@ class myLoginFragment : Fragment() {
         val b_AddProduct = mActivity.findViewById<Button>(R.id.button_Add_Product)
         linear.visibility = View.GONE
         b_AddProduct.visibility = View.GONE
+
+        //Take off Ad Banner
+        val ad_FirstBaneer = mActivity.findViewById<AdView>(R.id.adViewFirstBanner)
+        ad_FirstBaneer.visibility = View.GONE
 
         //et_Username.setOnFocusChangeListener { view, b -> et_Username.backgroundTintList = colorStateListBlack  }    //Change color in Gray after incorrect Typing UserName
         //et_Password.setOnFocusChangeListener { view, b -> et_Password.backgroundTintList = colorStateListBlack  }    //Change color in Gray after incorrect Typing Password
@@ -87,6 +93,10 @@ class myLoginFragment : Fragment() {
         )
 
         isNotFirstLogIn() // If we logged yet
+
+        tv_Registration.setOnClickListener(){
+            Navigation.findNavController(this.requireView()).navigate(R.id.action_myLoginFragment_to_registrationFragment)
+        }
 
         b_Login.setOnClickListener(){
             if(et_Username.text.toString() != "" && et_Password.text.toString() != ""){

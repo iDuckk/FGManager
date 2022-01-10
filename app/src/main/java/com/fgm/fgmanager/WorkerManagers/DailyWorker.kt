@@ -37,7 +37,6 @@ class DailyWorker(ctx: Context, params: WorkerParameters) : Worker(ctx, params) 
             // creating a DBHelper class
             // and passing context to it
             val db = DBHelper(applicationContext, null)
-
             // below is the variable for cursor
             // we have called method to get
             // all names from our database

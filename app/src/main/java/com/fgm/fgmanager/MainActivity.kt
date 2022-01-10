@@ -9,16 +9,25 @@ import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.work.*
 import com.fgm.fgmanager.WorkerManagers.DailyWorker
 import com.fgm.fgmanager.WorkerManagers.DailyWorkerFSdb
+import com.google.android.gms.ads.*
 
 import com.google.firebase.database.*
 import java.util.*
 import java.util.concurrent.TimeUnit
+import com.google.android.gms.ads.initialization.InitializationStatus
+
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener
+
+import com.google.android.gms.ads.interstitial.InterstitialAd
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
+
 
 val database = FirebaseDatabase.getInstance()
 val myRef = database.getReference(STORAGE.FireBasePath)
@@ -28,23 +37,23 @@ val KEY_COUNT_VALUE = "key_count"
 
 class MainActivity : AppCompatActivity() {
     //*************************************
-    // - Add counting Amount of days id CreateFireStore
-    // - Add DailyWorker with notification for Fire Store
-    // - Replace Class in Correct Package, Adapters and Fragments
-    // - Deleted needless Import Class and Values
-    // - Fixed WorkerManagers date notification "Срок истек" instead minus values
-    // - Fix sorting of items in ITEMS. Fire Store
-    // - Fix sorting of items in ITEMS. SQLdb
+    // - Create Registration Fragment
+    // - Added Google Advertisement (Banner, InterstitialAd)
     //*************************************
 
     //val CAMERA_RQ = 102
     //val itemsList : MutableList<PlaceholderContent.PlaceholderItem> = ArrayList()
+    lateinit var mAdView : AdView
+    var interAd : InterstitialAd? = null
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         supportActionBar?.hide()
         createNotificationChannel()//зарегистрировать канал уведомлений, Вызвать при запуске приложения
+        initAdMob() //Initialized Banner
+        loadInterAD() //Load Fullscreen Ad
 
         setDailyWorker()
         setDailyWorkerFSdb()
@@ -64,6 +73,52 @@ class MainActivity : AppCompatActivity() {
 
     }
     //**************************************************************************************************
+    fun loadInterAD(){
+        val adRequest = AdRequest.Builder().build()
+        InterstitialAd.load(this, "ca-app-pub-6587897644468158/5029076221", adRequest, object : InterstitialAdLoadCallback(){
+            override fun onAdFailedToLoad(p0: LoadAdError) {
+                super.onAdFailedToLoad(p0)
+                interAd = null
+            }
+
+            override fun onAdLoaded(p0: InterstitialAd) {
+                super.onAdLoaded(p0)
+                interAd = p0
+            }
+        })
+    }
+
+    fun showInterAd(){
+        if(interAd != null){
+            interAd?.fullScreenContentCallback = object  : FullScreenContentCallback(){
+                override fun onAdDismissedFullScreenContent() {
+                    interAd = null
+                    loadInterAD()
+                }
+
+                override fun onAdFailedToShowFullScreenContent(p0: AdError) {
+                    interAd = null
+                    loadInterAD()
+                }
+
+                override fun onAdShowedFullScreenContent() {
+                    interAd = null
+                    loadInterAD()
+                }
+            }
+            interAd?.show(this)
+        }else{
+            Toast.makeText(this, "Error Ad", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    fun initAdMob(){
+        MobileAds.initialize(this)
+        mAdView = findViewById(R.id.adViewFirstBanner)
+        val adRequest = AdRequest.Builder().build()
+        mAdView.loadAd(adRequest)
+    }
+
 //    fun parallelWorkRun(){
 //
 //        WorkManager.getInstance()

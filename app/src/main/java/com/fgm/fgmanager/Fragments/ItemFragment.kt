@@ -21,6 +21,7 @@ import com.fgm.fgmanager.Adapters.MyItemRecyclerViewAdapter
 import com.fgm.fgmanager.DBHelpers.DBHelper
 import com.fgm.fgmanager.DBHelpers.DBHelperLogIn
 import com.fgm.fgmanager.PoJo.placeholder.PlaceholderContent
+import com.google.android.gms.ads.AdView
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -29,7 +30,7 @@ import com.google.firebase.ktx.Firebase
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
-import java.util.ArrayList
+import java.util.*
 
 /**
  * A fragment representing a list of Items.
@@ -67,6 +68,13 @@ class ItemFragment : Fragment() {
         val linear = mActivity.findViewById<LinearLayout>(R.id.layoutMenu)
         val progressBar = mActivity.findViewById<ProgressBar>(R.id.progressBar)
         val b_AddProduct = mActivity.findViewById<Button>(R.id.button_Add_Product)
+        val ad_FirstBaneer = mActivity.findViewById<AdView>(R.id.adViewFirstBanner)
+
+        //Set AdView Banner
+        if(STORAGE.TypeAccFree){
+            ad_FirstBaneer.visibility = View.GONE
+        }else
+            ad_FirstBaneer.visibility = View.VISIBLE
 
         //Set Visible Button Add New Product
         b_AddProduct.visibility = View.VISIBLE
@@ -81,7 +89,14 @@ class ItemFragment : Fragment() {
 
 
         b_AddProduct.setOnClickListener{
-            Navigation.findNavController(view)
+            if(!STORAGE.TypeAccFree) {
+                var currentDate = Calendar.getInstance() // Receive current Date
+                if(STORAGE.AdPressButton) { //Show Ad only each 4 hours (currentDate.time.hours % 4 == 0) OR If you Press Button First time until you close App
+                    mActivity.showInterAd() //Show Add
+                    STORAGE.AdPressButton = false
+                }
+            }
+                Navigation.findNavController(view)
                 .navigate(R.id.action_itemFragment_to_craeteDateFragment) // Go to Create Fragment
         }
 
@@ -98,7 +113,10 @@ class ItemFragment : Fragment() {
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    DialogToQuit(view)
+                    if(STORAGE.TypeAccFree) {
+                        DialogToQuit(view)
+                    }else
+                        Navigation.findNavController(view).navigate(R.id.action_itemFragment_to_myLoginFragment)
                 }
             }
         )

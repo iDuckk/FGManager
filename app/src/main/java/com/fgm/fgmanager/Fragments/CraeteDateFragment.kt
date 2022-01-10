@@ -20,6 +20,7 @@ import com.fgm.fgmanager.R
 import com.fgm.fgmanager.STORAGE
 import com.fgm.fgmanager.PoJo.SaveProductNameDB
 import com.fgm.fgmanager.PoJo.placeholder.PlaceholderContent
+import com.google.android.gms.ads.AdView
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -83,6 +84,13 @@ class CraeteDateFragment : Fragment() {
         val tv_AmountDate = view.findViewById<TextView>(R.id.tv_amount_days)
         val mActivity : MainActivity = activity as MainActivity
         val b_AddProduct = mActivity.findViewById<Button>(R.id.button_Add_Product)
+        val ad_FirstBaneer = mActivity.findViewById<AdView>(R.id.adViewFirstBanner)
+
+        //Set AdView Banner
+        if(STORAGE.TypeAccFree){
+            ad_FirstBaneer.visibility = View.GONE
+        }else
+            ad_FirstBaneer.visibility = View.VISIBLE
 
         //Set Visible Button Add New Product
         b_AddProduct.visibility = View.GONE

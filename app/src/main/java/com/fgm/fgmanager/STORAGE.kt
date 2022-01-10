@@ -42,5 +42,8 @@ class STORAGE {
         val GROUP_KEY_WORK = "Group of Daily Worker"
         val NOTIFICATION_ID_DAILYWORKER = 11
 
+        //Ad
+        var AdPressButton : Boolean = true
+
     }
 }

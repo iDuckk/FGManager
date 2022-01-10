@@ -11,7 +11,10 @@ import android.widget.CalendarView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.navigation.Navigation
+import com.fgm.fgmanager.MainActivity
 import com.fgm.fgmanager.R
+import com.fgm.fgmanager.STORAGE
+import com.google.android.gms.ads.AdView
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
@@ -56,6 +59,14 @@ class CalendarFragment : Fragment() {
         val bundle = Bundle()
         val calendar = view.findViewById<CalendarView>(R.id.calendarView_My)
         val tv_SelectedDate = view.findViewById<TextView>(R.id.tv_SelectedDate)
+        val mActivity : MainActivity = activity as MainActivity
+        val ad_FirstBaneer = mActivity.findViewById<AdView>(R.id.adViewFirstBanner)
+
+        //Set AdView Banner
+        if(STORAGE.TypeAccFree){
+            ad_FirstBaneer.visibility = View.GONE
+        }else
+            ad_FirstBaneer.visibility = View.VISIBLE
 
         val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("d/M/yyyy")  //Format for Date
         val value = LocalDate.now().format(formatter)       //Set Format// Current Date

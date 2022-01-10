@@ -2,7 +2,7 @@
     <string name="app_name">FG manager</string>
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password</string>
+    <string name="prompt_password">Пароль</string>
     <string name="action_sign_in">Sign in or register</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="welcome">"Welcome!"</string>
@@ -15,14 +15,20 @@
     <string name="Title_of_Barcode">Штрих код:</string>
     <string name="hint_Enter_Of_Barcode">Введите штрихкод</string>
     <string name="title_Of_Product">Название:</string>
-    <string name="cancel">Cancel</string>
+    <string name="cancel">Отмена</string>
     <string name="title_Of_Date">Дата:</string>
     <string name="hint_tv_SelectedDate">MM/DD/YYYY</string>
     <string name="Title_of_Days">Дней:</string>
-    <string name="sign_out">Sign out</string>
-    <string name="sign_in">Sign in</string>
-    <string name="user_name">User name</string>
-    <string name="start_free_version">Start free version</string>
+    <string name="sign_out">Выйти</string>
+    <string name="sign_in">Войти</string>
+    <string name="user_name">Имя пользователя</string>
+    <string name="start_free_version">Бесплатная версия</string>
     <string name="textButtonOfAddProduct">+</string>
     <string name="Notification">Напоминание</string>
+    <string name="Registration">Зарегестрироваться</string>
+    <string name="Button_Ok_Registration">Зарегистрироваться</string>
+    <string name="Button_Cancel_Registration">Отмена</string>
+    <string name="tv_Reg_Name_Of_Database">Введите название базыданных</string>
+    <string name="Hint_type_name_of_database">Type name of Database</string>
+    <string name="tv_Choose_Plan">Выбирите план аккаунта</string>
 </resources>
