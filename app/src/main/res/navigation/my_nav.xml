@@ -67,6 +67,9 @@
         <action
             android:id="@+id/action_itemFragment_to_myLoginFragment"
             app:destination="@id/myLoginFragment" />
+        <action
+            android:id="@+id/action_itemFragment_to_menuFragment"
+            app:destination="@id/menuFragment" />
     </fragment>
     <fragment
         android:id="@+id/myLoginFragment"
@@ -88,5 +91,41 @@
         <action
             android:id="@+id/action_registrationFragment_to_myLoginFragment"
             app:destination="@id/myLoginFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/menuFragment"
+        android:name="com.fgm.fgmanager.Fragments.MenuFragment"
+        android:label="fragment_menu"
+        tools:layout="@layout/fragment_menu" >
+        <action
+            android:id="@+id/action_menuFragment_to_itemFragment"
+            app:destination="@id/itemFragment" />
+        <action
+            android:id="@+id/action_menuFragment_to_myLoginFragment"
+            app:destination="@id/myLoginFragment" />
+        <action
+            android:id="@+id/action_menuFragment_to_itemUsersFragment"
+            app:destination="@id/itemUsersFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/itemUsersFragment"
+        android:name="com.fgm.fgmanager.Fragments.ItemUsersFragment"
+        android:label="fragment_item_users"
+        tools:layout="@layout/fragment_item_users" >
+        <action
+            android:id="@+id/action_itemUsersFragment_to_menuFragment"
+            app:destination="@id/menuFragment" />
+        <action
+            android:id="@+id/action_itemUsersFragment_to_updatePasswordFragment"
+            app:destination="@id/updatePasswordFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/updatePasswordFragment"
+        android:name="com.fgm.fgmanager.Fragments.UpdatePasswordFragment"
+        android:label="fragment_update_password"
+        tools:layout="@layout/fragment_update_password" >
+        <action
+            android:id="@+id/action_updatePasswordFragment_to_itemUsersFragment"
+            app:destination="@id/itemUsersFragment" />
     </fragment>
 </navigation>

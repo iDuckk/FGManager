@@ -55,7 +55,7 @@
             android:id="@+id/tv_Name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
+            android:layout_marginStart="3dp"
             android:layout_marginEnd="6dp"
             android:text="@string/title_Of_Product"
             android:textSize="18sp"
@@ -115,13 +115,12 @@
             android:id="@+id/tv_DateTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="5dp"
             android:text="@string/title_Of_Date"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="@+id/tv_Date"
             app:layout_constraintEnd_toEndOf="@+id/tv_Name"
             app:layout_constraintHorizontal_bias="0.125"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/tv_Name"
             app:layout_constraintTop_toTopOf="@+id/tv_Date"
             app:layout_constraintVertical_bias="0.0" />
 

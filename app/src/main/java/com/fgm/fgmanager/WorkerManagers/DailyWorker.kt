@@ -178,7 +178,7 @@ class DailyWorker(ctx: Context, params: WorkerParameters) : Worker(ctx, params) 
         val timeDiff = dueDate.timeInMillis - currentDate.timeInMillis
         val dailyWorkRequest = OneTimeWorkRequestBuilder<DailyWorker>()
             .setInitialDelay(timeDiff, TimeUnit.MILLISECONDS)
-            .setConstraints(constraints)
+            //.setConstraints(constraints)
             .addTag(STORAGE.ID_DAILYWORKER)
             .build()
         WorkManager.getInstance(applicationContext)

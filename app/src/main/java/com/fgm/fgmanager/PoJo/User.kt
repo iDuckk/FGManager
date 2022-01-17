@@ -1,3 +1,5 @@
 package com.fgm.fgmanager.PoJo
 
-data class User(var User: String = "", val Password: String = "")
+import java.util.ArrayList
+
+data class User(var User: String = "", var Password: String = "")

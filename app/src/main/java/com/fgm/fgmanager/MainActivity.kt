@@ -39,6 +39,13 @@ class MainActivity : AppCompatActivity() {
     //*************************************
     // - Create Registration Fragment
     // - Added Google Advertisement (Banner, InterstitialAd)
+    // - Change way Receiving name for WorkingFS. Now I use SQL db. Because STORAGE.USERNAME don't storage value when disable app
+    // - Add boolean value "STORAGE.appWorkingCheckFS" cause Threw the exception when App running and calls Notification. We cannot refresh RecView.
+    // - Add UserLogin Fragment + Users List xml
+    // - Added fun for Filling Rec View
+    // - Added Fragment of Update Password
+    // - Added fun Update Password
+    // - Added Languages Ru, En
     //*************************************
 
     //val CAMERA_RQ = 102
@@ -55,6 +62,7 @@ class MainActivity : AppCompatActivity() {
         initAdMob() //Initialized Banner
         loadInterAD() //Load Fullscreen Ad
 
+        STORAGE.appWorkingCheckFS = false //Prohibited call notification when App running
         setDailyWorker()
         setDailyWorkerFSdb()
 
@@ -72,7 +80,7 @@ class MainActivity : AppCompatActivity() {
 
 
     }
-    //**************************************************************************************************
+    //**************************************************************************
     fun loadInterAD(){
         val adRequest = AdRequest.Builder().build()
         InterstitialAd.load(this, "ca-app-pub-6587897644468158/5029076221", adRequest, object : InterstitialAdLoadCallback(){
@@ -150,7 +158,7 @@ class MainActivity : AppCompatActivity() {
 
         val dailyWorkRequest = OneTimeWorkRequestBuilder<DailyWorker>()
             .setInitialDelay(timeDiff, TimeUnit.MILLISECONDS)
-            .setConstraints(constraints)
+            //.setConstraints(constraints)
             .addTag(STORAGE.ID_DAILYWORKER)
             .build()
         WorkManager.getInstance(this).enqueue(dailyWorkRequest)
@@ -186,7 +194,7 @@ class MainActivity : AppCompatActivity() {
 
         val dailyWorkFSdbRequest = OneTimeWorkRequestBuilder<DailyWorkerFSdb>()
                 .setInitialDelay(timeDiff, TimeUnit.MILLISECONDS)
-                .setConstraints(constraints)
+                //.setConstraints(constraints)
                 .addTag(STORAGE.ID_DAILYWORKERFS)
                 .build() //                .setConstraints(constraints)
         WorkManager.getInstance(this).enqueue(dailyWorkFSdbRequest)

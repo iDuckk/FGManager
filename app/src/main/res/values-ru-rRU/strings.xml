@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="prompt_password">Пароль</string>
+    <string name="Enter_name_of_product">Введите название</string>
+    <string name="Title_of_Barcode">Штрих код:</string>
+    <string name="hint_Enter_Of_Barcode">Введите штрихкод</string>
+    <string name="title_Of_Product">Название:</string>
+    <string name="cancel">Отмена</string>
+    <string name="title_Of_Date">Дата:</string>
+    <string name="Title_of_Days">Дней:</string>
+    <string name="sign_out">Выйти</string>
+    <string name="menu">Меню</string>
+    <string name="sign_in">Войти</string>
+    <string name="user_name">Имя пользователя</string>
+    <string name="start_free_version">Бесплатная версия</string>
+    <string name="Notification">Напоминание</string>
+    <string name="Registration">Зарегестрироваться</string>
+    <string name="Button_Ok_Registration">Зарегистрироваться</string>
+    <string name="Button_Cancel_Registration">Отмена</string>
+    <string name="tv_Reg_Name_Of_Database">Введите название базыданных</string>
+    <string name="tv_Choose_Plan">Выбирите план аккаунта</string>
+    <string name="Menu_Back">Назад</string>
+    <string name="Menu_Settings">Настройки</string>
+    <string name="List_Of_Users">Список Пользователей</string>
+    <string name="Users_Old_Password">Старый пароль</string>
+    <string name="Users_New_Password">Введите новый пароль</string>
+    <string name="Users_Confirm_Password">Повторите введеный пароль</string>
+    <string name="Users_Type_New_Password">Введите пароль</string>
+    <string name="Users_Confirm_New_Password">Повторите пароль</string>
+    <string name="Uncorrect_LinesOfNewPassword">Неправильно заполнены поля</string>
+    <string name="FillBothLines">Заполните оба поля Логин и Пароль</string>
+    <string name="Delete_Item">Удалить</string>
+    <string name="Question_Delete_Item">Удалить элемент?</string>
+    <string name="Answer_Delete_Item_Yes">Да</string>
+    <string name="Answer_Delete_Item_No">Нет</string>
+    <string name="Log_Out_Title">Выход</string>
+    <string name="Question_To_LogOut">Вы уверены, что хотите выйти из приложения?</string>
+    <string name="expiration_date">Срок истек</string>
+    <string name="left_date">Осталось дней:</string>
+</resources>

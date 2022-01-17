@@ -1,5 +1,8 @@
 package com.fgm.fgmanager
 
+import com.fgm.fgmanager.PoJo.User
+import java.util.ArrayList
+
 class STORAGE {
     companion object{
         var NameEdit = ""
@@ -36,6 +39,7 @@ class STORAGE {
         val ID_DAILYWORKERFS = "send_reminder_periodic_FS"
         val GROUP_KEY_WORK_FS = "Group_of_Daily_WorkerFS"
         val NOTIFICATION_ID_DAILYWORKER_FS = 10
+        var appWorkingCheckFS : Boolean = true
 
         //dailyWorker
         val ID_DAILYWORKER = "send_reminder_periodic"
@@ -44,6 +48,11 @@ class STORAGE {
 
         //Ad
         var AdPressButton : Boolean = true
+
+        //ListUsers in Menu
+        val ITEMS: MutableList<User> = ArrayList()
+        var checkPressOtherRow : Boolean = true
+        var OldPassword : String = ""
 
     }
 }

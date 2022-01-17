@@ -79,6 +79,9 @@ class myLoginFragment : Fragment() {
         val ad_FirstBaneer = mActivity.findViewById<AdView>(R.id.adViewFirstBanner)
         ad_FirstBaneer.visibility = View.GONE
 
+        //Set Visible all Views
+        holdOnAllViewsOnFragments(this.requireView(), true)
+
         //et_Username.setOnFocusChangeListener { view, b -> et_Username.backgroundTintList = colorStateListBlack  }    //Change color in Gray after incorrect Typing UserName
         //et_Password.setOnFocusChangeListener { view, b -> et_Password.backgroundTintList = colorStateListBlack  }    //Change color in Gray after incorrect Typing Password
 
@@ -115,7 +118,7 @@ class myLoginFragment : Fragment() {
                         colorStateList     //Change color in Gray If incorrect Typing Password or not Typing
                 }
 
-                Toast.makeText(context, "Заполните оба поля Логин и Пароль", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, R.string.FillBothLines, Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -250,8 +253,9 @@ class myLoginFragment : Fragment() {
                                 dbSaveLogin.addUser(username, password)
                                 progressBar.visibility = View.VISIBLE
                                 STORAGE.TypeAccFree = true
-                                STORAGE.UserName = username
+                                STORAGE.UserName = username //We use the Value when Fill Menu -> UserName List
 //                            tv_Users.setText(STORAGE.UserName)
+                                holdOnAllViewsOnFragments(this.requireView(), false)
                                 Navigation.findNavController(this.requireView())
                                     .navigate(R.id.action_myLoginFragment_to_itemFragment)
                             }
@@ -264,6 +268,21 @@ class myLoginFragment : Fragment() {
                     }
                 }
         }
+    }
+
+    fun holdOnAllViewsOnFragments(view : View, a : Boolean){
+        val et_Username = view.findViewById<EditText>(R.id.username)
+        val et_Password = view.findViewById<EditText>(R.id.password)
+        val b_Login = view.findViewById<Button>(R.id.login)
+        val b_FreeLogin = view.findViewById<Button>(R.id.b_FreeLogin)
+        val tv_Registration = view.findViewById<TextView>(R.id.tv_Registration)
+
+            et_Username.setEnabled(a)
+            et_Password.setEnabled(a)
+            b_Login.setEnabled(a)
+            b_FreeLogin.setEnabled(a)
+            tv_Registration.setEnabled(a)
+
     }
 
         //**

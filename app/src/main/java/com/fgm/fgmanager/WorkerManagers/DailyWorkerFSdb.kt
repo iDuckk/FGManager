@@ -11,6 +11,7 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.work.*
 import com.fgm.fgmanager.*
 import com.fgm.fgmanager.DBHelpers.DBHelper
+import com.fgm.fgmanager.DBHelpers.DBHelperLogIn
 import com.fgm.fgmanager.R
 import com.fgm.fgmanager.PoJo.placeholder.PlaceholderContent
 import com.google.firebase.firestore.ktx.firestore
@@ -24,6 +25,7 @@ import java.util.concurrent.TimeUnit
 class DailyWorkerFSdb(appContext: Context, workerParams: WorkerParameters) : Worker(appContext, workerParams) {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun doWork(): Result {
+        var resultNameOfCollection : String = ""  //resultNameOfCollection Is Name OF Main Collection
         var NOTIFICATION_ID : Int = 101
         val dbFSnot = Firebase.firestore
         var strAmountOfDay: String = ""
@@ -34,9 +36,18 @@ class DailyWorkerFSdb(appContext: Context, workerParams: WorkerParameters) : Wor
             value,
             formatter
         )      //This Argument for counting number of days. If I set it in TextView, that Format is YYYY/MM/DD...
-        val resultNameOfCollection =
+
+        //Take Name User for Collection`s name
+        val dbSaveLogin = DBHelperLogIn(applicationContext, null)
+        val cursor = dbSaveLogin.getUser()
+        cursor!!.moveToFirst()
+        if(cursor.count != 0) {
+            STORAGE.UserName = cursor.getString(cursor.getColumnIndex(DBHelperLogIn.USER_NAME)).toString()
+        }
+        cursor.close()
+        resultNameOfCollection =
             STORAGE.UserName.split("0")[0] //Delete Number of Users from end of the line
-        //resultNameOfCollection Is Name OF Main Collection
+
         val docRef = dbFSnot.collection(resultNameOfCollection).document("DataBase")
         docRef.addSnapshotListener() { snapshot, e -> //MetadataChanges.INCLUDE
             if (e != null) {
@@ -49,7 +60,7 @@ class DailyWorkerFSdb(appContext: Context, workerParams: WorkerParameters) : Wor
             else
                 "Server"
 
-            if (snapshot != null && snapshot.exists()) {
+            if (snapshot != null && snapshot.exists() && STORAGE.appWorkingCheckFS) {
                 val data = snapshot.data as Map<String, MutableMap<String, String>>
                 if (PlaceholderContent.ITEMS.size > 0) PlaceholderContent.ITEMS.clear() //CLear up ItemsList.
 
@@ -114,7 +125,7 @@ class DailyWorkerFSdb(appContext: Context, workerParams: WorkerParameters) : Wor
                 Log.d("TAG", "$source data: null")
             }
         }
-
+        dbFSnot.disableNetwork()
         var currentDate = Calendar.getInstance()
         val dueDate = Calendar.getInstance()
 // Set Execution around 24:00:00 AM
@@ -133,7 +144,7 @@ class DailyWorkerFSdb(appContext: Context, workerParams: WorkerParameters) : Wor
 
         val dailyWorkFSdbRequest = OneTimeWorkRequestBuilder<DailyWorkerFSdb>()
             .setInitialDelay(timeDiff, TimeUnit.MILLISECONDS)
-            .setConstraints(constraints)
+            //.setConstraints(constraints)
             .addTag(STORAGE.ID_DAILYWORKERFS)
             .build()
         WorkManager.getInstance(applicationContext).enqueue(dailyWorkFSdbRequest)

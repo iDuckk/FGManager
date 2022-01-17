@@ -66,6 +66,7 @@ class MyItemRecyclerViewAdapter(
         val tv_Item_Date: TextView = binding.tvItemDate
         val tv_Item_Barcode: TextView = binding.tvItemBarcode
         val tv_Item_Amout: TextView = binding.tvAmountDays
+        val tv_Item_Title_NumberDays: TextView = binding.tvTitleNumberDays
         val im_Delete_Item : ImageView = binding.imDeleteItem
         val im_Button_Item: ImageView = binding.imGoToCreateDateFragment
     }
@@ -76,6 +77,7 @@ class MyItemRecyclerViewAdapter(
             holder.tv_Item_Date.visibility = View.GONE
             holder.tv_Item_Barcode.visibility = View.GONE
             holder.tv_Item_Amout.visibility = View.GONE
+            holder.tv_Item_Title_NumberDays.visibility = View.GONE
             holder.im_Delete_Item.visibility = View.GONE
             holder.im_Button_Item.visibility = View.VISIBLE     //Show Image for "Click Button"
 
@@ -89,6 +91,7 @@ class MyItemRecyclerViewAdapter(
             holder.tv_Item_Date.visibility = View.VISIBLE
             holder.tv_Item_Barcode.visibility = View.VISIBLE
             holder.tv_Item_Amout.visibility = View.VISIBLE
+            holder.tv_Item_Title_NumberDays.visibility = View.VISIBLE
             holder.im_Delete_Item.visibility = View.VISIBLE
             holder.im_Button_Item.visibility = View.GONE
         }
@@ -114,19 +117,26 @@ class MyItemRecyclerViewAdapter(
         //Set Text in Cardholder Items
         holder.tv_Item_NameProduct.text = item.productName
         holder.tv_Item_Date.text = item.productDate
-        holder.tv_Item_Barcode.text = item.productBarcode
-        if (amountInt == null) holder.tv_Item_Amout.text ="Срок истек" else holder.tv_Item_Amout.text = "Осталось $amountInt дней"
+        holder.tv_Item_Barcode.text = item.productBarcode // R.string.left_date.toString() + " $amountInt " + R.string.left_dates //
+        //var str : String = R.string.left_date.toString()
+        if (amountInt == null) {
+            holder.tv_Item_Title_NumberDays.setText(R.string.expiration_date)
+            holder.tv_Item_Amout.visibility = View.GONE
+        } else {
+            holder.tv_Item_Title_NumberDays.setText(R.string.left_date)
+            holder.tv_Item_Amout.setText(" $amountInt")
+        }
     }
 
     fun DialogToDelete(holder : ViewHolder, position : Int) {
         holder.im_Delete_Item.setOnClickListener {
             val builder: AlertDialog.Builder = AlertDialog.Builder(par)     //Set Dialog
             val dialog =
-                builder.setTitle("Удалить").setMessage("Удалить элемент?")
-                    .setTitle("Удалить")
+                builder.setTitle(R.string.Delete_Item).setMessage(R.string.Question_Delete_Item)
+                    .setTitle(R.string.Delete_Item)
                     .setIcon(android.R.drawable.ic_dialog_alert)
-                    .setMessage("Удалить элемент?")
-                    .setPositiveButton("Да") {       //When click "Yes"
+                    .setMessage(R.string.Question_Delete_Item)
+                    .setPositiveButton(R.string.Answer_Delete_Item_Yes) {       //When click "Yes"
                             dialog, id ->
                         if(STORAGE.TypeAccFree) {
 //                            myRef.child(values[position].keyProduct)
@@ -142,7 +152,7 @@ class MyItemRecyclerViewAdapter(
                         Navigation.findNavController(holder.itemView)
                             .navigate(R.id.action_itemFragment_self) // That refresh ItemFragment
                     }
-                    .setNegativeButton("Нет", null)
+                    .setNegativeButton(R.string.Answer_Delete_Item_No, null)
                     .create()
             dialog.show()
         }
@@ -159,7 +169,7 @@ class MyItemRecyclerViewAdapter(
         )
         docRef.update(updates).addOnCompleteListener { }
         //Log.d("TAG", "Key product from MYRV fun delete${values[position].keyProduct}")
-        docRef.update(updates).addOnCompleteListener { }
+        //docRef.update(updates).addOnCompleteListener { }
 
 //            .delete()
 //            .addOnSuccessListener { Log.d("TAG", "DocumentSnapshot successfully deleted!") }

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Fragments.MenuFragment">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="240dp" />
+
+        <Button
+            android:id="@+id/b_ListOfUsers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/List_Of_Users" />
+
+        <Button
+            android:id="@+id/b_Menu_Settings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/Menu_Settings" />
+
+        <Button
+            android:id="@+id/b_Menu_LogOut"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/sign_out" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="82dp" />
+
+        <Button
+            android:id="@+id/b_Menu_Back"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/Menu_Back" />
+    </LinearLayout>
+</FrameLayout>

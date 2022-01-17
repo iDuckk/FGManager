@@ -139,6 +139,15 @@ class CraeteDateFragment : Fragment() {
         }*/
 
         b_Ok.setOnClickListener {
+            //Advertisement
+            if(!STORAGE.TypeAccFree) {
+                var currentDate = Calendar.getInstance() // Receive current Date
+                if(STORAGE.AdPressButton) { //Show Ad only each 4 hours (currentDate.time.hours % 4 == 0) OR If you Press Button First time until you close App
+                    mActivity.showInterAd() //Show Add
+                    STORAGE.AdPressButton = false
+                }
+            }
+
             //Add Arguments in FireBase IF arguments do not NULL
             if(et_NameProduct.text.toString() != "" && et_Barcode.text.toString() != ""&& tv_Date.text.toString() != ""
                 && amountDays.toString() != "" && amountDays!!.toInt() > 0) {

@@ -1,36 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">FG manager</string>
-    <!-- Strings related to login -->
-    <string name="prompt_email" translatable="false">Email</string>
-    <string name="prompt_password">Password</string>
-    <string name="action_sign_in" translatable="false">Sign in or register</string>
-    <string name="action_sign_in_short" translatable="false">Sign in</string>
-    <string name="welcome" translatable="false">"Welcome!"</string>
-    <string name="invalid_username" translatable="false">Not a valid username</string>
-    <string name="invalid_password" translatable="false">Password must be >5 characters</string>
-    <string name="login_failed" translatable="false">"Login failed"</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
     <string name="Enter_name_of_product">Type a name</string>
     <string name="Title_of_Barcode">Barcode:</string>
     <string name="hint_Enter_Of_Barcode">Type a barcode</string>
     <string name="title_Of_Product">Name:</string>
     <string name="cancel">Cancel</string>
     <string name="title_Of_Date">Date:</string>
-    <string name="hint_tv_SelectedDate" translatable="false">MM/DD/YYYY</string>
     <string name="Title_of_Days">Dates:</string>
     <string name="sign_out">Exit</string>
     <string name="menu">Menu</string>
     <string name="sign_in">Log in</string>
     <string name="user_name">Name user</string>
     <string name="start_free_version">Free account</string>
-    <string name="textButtonOfAddProduct" translatable="false">+</string>
     <string name="Notification">Notification</string>
     <string name="Registration">Registration</string>
     <string name="Button_Ok_Registration">Registration</string>
     <string name="Button_Cancel_Registration">Cancel</string>
     <string name="tv_Reg_Name_Of_Database">Type database\'s name</string>
-    <string name="Hint_type_name_of_database" translatable="false">Type name of Database</string>
     <string name="tv_Choose_Plan">Choose account\'s plan</string>
     <string name="Menu_Back">Back</string>
     <string name="Menu_Settings">Settings</string>
@@ -38,7 +24,6 @@
     <string name="Users_Old_Password">Old password</string>
     <string name="Users_New_Password">Enter new password</string>
     <string name="Users_Confirm_Password">Confirm password</string>
-    <string name="Button_Ok" translatable="false">Ok</string>
     <string name="Users_Type_New_Password">Type password</string>
     <string name="Users_Confirm_New_Password">Confirm password</string>
     <string name="Uncorrect_LinesOfNewPassword">Fields filled out incorrectly</string>
@@ -47,6 +32,7 @@
     <string name="Question_Delete_Item">Delete item ?</string>
     <string name="Answer_Delete_Item_Yes">Yes</string>
     <string name="Answer_Delete_Item_No">No</string>
+    <string name="prompt_password">Password</string>
     <string name="Log_Out_Title">Exit</string>
     <string name="Question_To_LogOut">Are you sure, that you want to Log out?</string>
     <string name="expiration_date">expiration date has expired</string>

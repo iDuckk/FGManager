@@ -72,10 +72,12 @@ class ItemFragment : Fragment() {
 
         //Set AdView Banner
         if(STORAGE.TypeAccFree){
+            tv_SignOut.setText(R.string.menu)
             ad_FirstBaneer.visibility = View.GONE
-        }else
+        }else {
+            tv_SignOut.setText(R.string.sign_out)
             ad_FirstBaneer.visibility = View.VISIBLE
-
+        }
         //Set Visible Button Add New Product
         b_AddProduct.visibility = View.VISIBLE
         //SET Menu Bar
@@ -89,13 +91,13 @@ class ItemFragment : Fragment() {
 
 
         b_AddProduct.setOnClickListener{
-            if(!STORAGE.TypeAccFree) {
-                var currentDate = Calendar.getInstance() // Receive current Date
-                if(STORAGE.AdPressButton) { //Show Ad only each 4 hours (currentDate.time.hours % 4 == 0) OR If you Press Button First time until you close App
-                    mActivity.showInterAd() //Show Add
-                    STORAGE.AdPressButton = false
-                }
-            }
+//            if(!STORAGE.TypeAccFree) {
+//                var currentDate = Calendar.getInstance() // Receive current Date
+//                if(STORAGE.AdPressButton) { //Show Ad only each 4 hours (currentDate.time.hours % 4 == 0) OR If you Press Button First time until you close App
+//                    mActivity.showInterAd() //Show Add
+//                    STORAGE.AdPressButton = false
+//                }
+//            }
                 Navigation.findNavController(view)
                 .navigate(R.id.action_itemFragment_to_craeteDateFragment) // Go to Create Fragment
         }
@@ -103,7 +105,8 @@ class ItemFragment : Fragment() {
         tv_SignOut.setOnClickListener{
             //LoginDataSource::logout
             if(STORAGE.TypeAccFree){
-                DialogToQuit(view)     //From Online DataBase
+                Navigation.findNavController(view).navigate(R.id.action_itemFragment_to_menuFragment) //Menu
+                //DialogToQuit(view)     //From Online DataBase
             }else{
                 Navigation.findNavController(view).navigate(R.id.action_itemFragment_to_myLoginFragment) //Offline DataBase
             }
@@ -173,16 +176,16 @@ class ItemFragment : Fragment() {
 
     fun DialogToQuit(view : View){
         val builder: AlertDialog.Builder = AlertDialog.Builder(activity)
-        val dialog =  builder.setTitle("Выход").setMessage("Вы уверены, что хотите выйти из приложения")
-            .setTitle("Выход")
+        val dialog =  builder.setTitle(getString(R.string.Log_Out_Title)).setMessage(getString(R.string.Question_To_LogOut))
+            .setTitle(R.string.Log_Out_Title)
             .setIcon(android.R.drawable.ic_dialog_alert)
-            .setMessage("Вы уверены, что хотите выйти из приложения?")
-            .setPositiveButton("OK"){
+            .setMessage(R.string.Question_To_LogOut)
+            .setPositiveButton(R.string.Answer_Delete_Item_Yes){
                     dialog, id ->
                 logOut()
                 Navigation.findNavController(view).navigate(R.id.action_itemFragment_to_myLoginFragment)
             }
-            .setNegativeButton("Отмена", null)
+            .setNegativeButton(R.string.Answer_Delete_Item_No, null)
             .create()
         dialog.show()
     }
