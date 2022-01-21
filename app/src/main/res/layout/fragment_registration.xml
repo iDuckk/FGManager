@@ -89,34 +89,34 @@
             app:layout_constraintStart_toStartOf="@+id/tv_Choose_the_Plan">
 
             <RadioButton
-                android:id="@+id/radioButton1"
+                android:id="@+id/radioButton_5u"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="5 пользователей" />
+                android:text="@string/users_5" />
 
             <RadioButton
-                android:id="@+id/radioButton2"
+                android:id="@+id/radioButton_15"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="15 пользователей" />
+                android:text="@string/users_15" />
 
             <RadioButton
-                android:id="@+id/radioButton3"
+                android:id="@+id/radioButton_25"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="25 пользователей" />
+                android:text="@string/users_25" />
 
             <RadioButton
-                android:id="@+id/radioButton4"
+                android:id="@+id/radioButton_50"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="50 пользователей" />
+                android:text="@string/users_50" />
 
             <RadioButton
-                android:id="@+id/radioButton5"
+                android:id="@+id/radioButton_100"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="100 пользователей" />
+                android:text="@string/users_100" />
         </RadioGroup>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

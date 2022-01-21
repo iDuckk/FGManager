@@ -8,12 +8,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import com.fgm.fgmanager.DBHelpers.DBHelperLogIn
 import com.fgm.fgmanager.MainActivity
+import com.fgm.fgmanager.Models.modelHelpers
 import com.fgm.fgmanager.R
 import com.fgm.fgmanager.STORAGE
 
@@ -55,7 +57,11 @@ class MenuFragment : Fragment() {
         val b_Exit = view.findViewById<Button>(R.id.b_Menu_LogOut)
         val b_Users = view.findViewById<Button>(R.id.b_ListOfUsers)
 
+        val modelHelpers = modelHelpers(activity as MainActivity)
+
         val mActivity : MainActivity = activity as MainActivity
+        val progressBar = mActivity.findViewById<ProgressBar>(R.id.progressBar)
+        progressBar.visibility = View.INVISIBLE
         val b_AddProduct = mActivity.findViewById<Button>(R.id.button_Add_Product)
         val linear = mActivity.findViewById<LinearLayout>(R.id.layoutMenu)
         //SET OFF Menu Bar
@@ -81,38 +87,10 @@ class MenuFragment : Fragment() {
         }
 
         b_Exit.setOnClickListener{
-            DialogToQuit(view)     //Quit From Online DataBase
+            modelHelpers.DialogToQuit(view, STORAGE.MenuFrag)
         }
 
     }
-
-    fun DialogToQuit(view : View){
-        val builder: AlertDialog.Builder = AlertDialog.Builder(activity)
-        val dialog =  builder.setTitle(R.string.Log_Out_Title).setMessage(R.string.Question_To_LogOut)
-            .setTitle(R.string.Log_Out_Title)
-            .setIcon(android.R.drawable.ic_dialog_alert)
-            .setMessage(R.string.Question_To_LogOut)
-            .setPositiveButton(R.string.Answer_Delete_Item_Yes){
-                    dialog, id ->
-                logOut()
-                Navigation.findNavController(view).navigate(R.id.action_menuFragment_to_myLoginFragment)
-            }
-            .setNegativeButton(R.string.Answer_Delete_Item_No, null)
-            .create()
-        dialog.show()
-    }
-    fun logOut(){
-        if(STORAGE.TypeAccFree) {
-            val mActivity: MainActivity = activity as MainActivity
-            val tv_Users = mActivity.findViewById<TextView>(R.id.tv_User)
-//            val str = tv_User
-//            tv_Users.setText("username")
-//        auth.signOut()
-            val dbSaveLogin = DBHelperLogIn(requireContext(), null)
-            dbSaveLogin.deleteCourse(STORAGE.UserName)
-        }
-    }
-
 
     companion object {
         /**

@@ -24,6 +24,7 @@
         <Button
             android:id="@+id/b_Menu_Settings"
             android:layout_width="match_parent"
+            android:visibility="gone"
             android:layout_height="wrap_content"
             android:text="@string/Menu_Settings" />
 

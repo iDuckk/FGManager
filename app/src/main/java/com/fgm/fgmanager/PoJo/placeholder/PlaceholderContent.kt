@@ -1,5 +1,20 @@
 package com.fgm.fgmanager.PoJo.placeholder
 
+import android.os.Build
+import android.util.Log
+import android.view.View
+import android.widget.ProgressBar
+import androidx.annotation.RequiresApi
+import androidx.recyclerview.widget.RecyclerView
+import com.fgm.fgmanager.MainActivity
+import com.fgm.fgmanager.Models.modelForProductItems
+import com.fgm.fgmanager.R
+import com.fgm.fgmanager.STORAGE
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 import java.util.ArrayList
 
 /**
@@ -8,6 +23,8 @@ import java.util.ArrayList
  *
  * TODO: Replace all uses of this class before publishing your app.
  */
+
+@RequiresApi(Build.VERSION_CODES.O)
 object PlaceholderContent {
 
     /**
@@ -28,7 +45,6 @@ object PlaceholderContent {
         /*for (i in 0..COUNT) {
             addItem(createPlaceholderItem(i))
         }*/
-
     }
 
     /*private fun addItem(item: PlaceholderItem) {

@@ -91,6 +91,9 @@
         <action
             android:id="@+id/action_registrationFragment_to_myLoginFragment"
             app:destination="@id/myLoginFragment" />
+        <action
+            android:id="@+id/action_registrationFragment_to_itemFragment"
+            app:destination="@id/itemFragment" />
     </fragment>
     <fragment
         android:id="@+id/menuFragment"

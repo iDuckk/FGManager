@@ -1,6 +1,7 @@
 package com.fgm.fgmanager
 
 import com.fgm.fgmanager.PoJo.User
+import com.google.android.gms.ads.interstitial.InterstitialAd
 import java.util.ArrayList
 
 class STORAGE {
@@ -48,11 +49,19 @@ class STORAGE {
 
         //Ad
         var AdPressButton : Boolean = true
+        var interAd : InterstitialAd? = null
 
         //ListUsers in Menu
         val ITEMS: MutableList<User> = ArrayList()
         var checkPressOtherRow : Boolean = true
         var OldPassword : String = ""
+        var userNameForChangePass : String = ""
 
+        //Quit Fun From model Helpers
+        val itemFrag = "ItemFragment"
+        val MenuFrag = "MenuFragment"
+
+        //Camera
+        val CAMERA_RQ = 102
     }
 }

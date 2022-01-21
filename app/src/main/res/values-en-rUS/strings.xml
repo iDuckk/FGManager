@@ -37,4 +37,10 @@
     <string name="Question_To_LogOut">Are you sure, that you want to Log out?</string>
     <string name="expiration_date">expiration date has expired</string>
     <string name="left_date">Left days:</string>
+    <string name="users_5">5 Users</string>
+    <string name="users_15">15 Users</string>
+    <string name="users_25">25 Users</string>
+    <string name="users_50">50 Users</string>
+    <string name="users_100">100 Users</string>
+    <string name="ET_DatabaseName">Fill the gap of Database\'s name</string>
 </resources>

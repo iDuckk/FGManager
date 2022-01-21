@@ -58,6 +58,7 @@ class usersAdapter(
 //                STORAGE.checkPressOtherRow = true
 //            }
             STORAGE.OldPassword = item.Password
+            STORAGE.userNameForChangePass = item.User
             Navigation.findNavController(holder.itemView)
                 .navigate(R.id.action_itemUsersFragment_to_updatePasswordFragment) // Go to Create New Password Fragment
         }

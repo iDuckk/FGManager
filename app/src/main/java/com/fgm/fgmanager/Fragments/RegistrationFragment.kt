@@ -5,6 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.EditText
+import android.widget.RadioGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import com.fgm.fgmanager.R
@@ -43,8 +46,32 @@ class RegistrationFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        var amountOfUser : Int = 0
+
         val b_Cancel_Registration = view.findViewById<Button>(R.id.b_Reg_Cancel)
         val b_Ok_Registration = view.findViewById<Button>(R.id.b_Reg_Ok)
+        val et_Type_Database = view.findViewById<EditText>(R.id.et_Name_Of_Database)
+        val rg_Type_Plan = view.findViewById<RadioGroup>(R.id.id_Radio_Group)
+
+        rg_Type_Plan.setOnCheckedChangeListener{group, Id->
+            when(Id){
+                R.id.radioButton_5u -> amountOfUser = 5
+                R.id.radioButton_15 -> amountOfUser = 15
+                R.id.radioButton_25 -> amountOfUser = 25
+                R.id.radioButton_50 -> amountOfUser = 50
+                R.id.radioButton_100 -> amountOfUser = 100
+            }
+        }
+
+        b_Ok_Registration.setOnClickListener{
+            if(et_Type_Database.text.toString() != ""){
+
+
+                //Navigation.findNavController(this.requireView()).navigate(R.id.action_registrationFragment_to_myLoginFragment)
+            }else{
+                Toast.makeText(context, getString(R.string.ET_DatabaseName), Toast.LENGTH_SHORT).show()
+            }
+        }
 
         b_Cancel_Registration.setOnClickListener{
             Navigation.findNavController(this.requireView()).navigate(R.id.action_registrationFragment_to_myLoginFragment)

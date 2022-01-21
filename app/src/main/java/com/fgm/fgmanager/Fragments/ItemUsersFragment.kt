@@ -19,6 +19,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.fgm.fgmanager.Adapters.usersAdapter
 import com.fgm.fgmanager.DBHelpers.DBHelperLogIn
 import com.fgm.fgmanager.MainActivity
+import com.fgm.fgmanager.Models.modelForProductItems
+import com.fgm.fgmanager.Models.modelUsersList
 import com.fgm.fgmanager.PoJo.User
 import com.fgm.fgmanager.PoJo.placeholder.PlaceholderContent
 import com.fgm.fgmanager.R
@@ -58,6 +60,10 @@ class ItemUsersFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_users_list, container, false)
 
+        val modelUserList = modelUsersList(activity as MainActivity)
+        val mActivity : MainActivity = activity as MainActivity
+        val progressBar = mActivity.findViewById<ProgressBar>(R.id.progressBar)
+
 //        val tv_usersListName = view.findViewById<TextView>(R.id.et_Users_UserName) //EDIT TEXT!!!
 //        val tv_usersListPassword = view.findViewById<TextView>(R.id.et_Users_Password)
 
@@ -76,11 +82,9 @@ class ItemUsersFragment : Fragment() {
                     columnCount <= 1 -> LinearLayoutManager(context)
                     else -> GridLayoutManager(context, columnCount)
                 }
-                CreateFireStoreDB(view)     //FireStore DB
-//                val ITEMS: MutableList<User> = ArrayList()
-//                ITEMS.add(User("Loh", "Pidor"))
+                modelUserList.CreateFireStoreDB(view)     //FireStore DB
                 adapter = usersAdapter(STORAGE.ITEMS)
-                //adapter?.notifyDataSetChanged()    // If change, Reload Recycler View
+                progressBar.visibility = View.INVISIBLE
             }
         }
 
@@ -99,47 +103,5 @@ class ItemUsersFragment : Fragment() {
                     putInt(ARG_COLUMN_COUNT, columnCount)
                 }
             }
-    }
-
-    @RequiresApi(Build.VERSION_CODES.N)
-    fun CreateFireStoreDB(RecView: RecyclerView) {
-        val dbFSUsers = Firebase.firestore
-//        val progressBar = mActivity.findViewById<ProgressBar>(R.id.progressBar)
-
-        val resultNameOfCollection =
-            STORAGE.UserName.split("0")[0] //Delete Number of Users from end of the line
-        val docRef = dbFSUsers.collection(resultNameOfCollection).document("Users")
-        docRef.addSnapshotListener() { snapshot, e -> //MetadataChanges.INCLUDE
-            if (e != null) {
-                Log.w("TAG", "Listen failed.", e)
-                return@addSnapshotListener
-            }
-
-            val source = if (snapshot != null && snapshot.metadata.hasPendingWrites())
-                "Local"
-            else
-                "Server"
-
-            if (snapshot != null && snapshot.exists()) {
-                val data = snapshot.data as Map<String, MutableMap<String, String>>
-                if (STORAGE.ITEMS.size > 0) STORAGE.ITEMS.clear() //CLear up ItemsList.
-                data.forEach { t, u ->          //Add Items in Array for each
-                    STORAGE.ITEMS.add(
-                        User(
-                            "${u!!.get("User")}",
-                            "${u!!.get("Password")}",
-                        )
-                    )
-                }
-
-            } else {
-                Log.d("TAG", "$source data: null")
-            }
-            //Last Item FOR BUTTON
-            STORAGE.ITEMS.add(User("Button",""))
-
-//            PlaceholderContent.ITEMS.sortBy { it.numberForSorting } // Sorting of List
-            RecView.adapter?.notifyDataSetChanged()    // If change, Reload Recycler View
-        }
     }
 }

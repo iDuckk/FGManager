@@ -37,4 +37,10 @@
     <string name="Question_To_LogOut">Вы уверены, что хотите выйти из приложения?</string>
     <string name="expiration_date">Срок истек</string>
     <string name="left_date">Осталось дней:</string>
+    <string name="users_5">5 пользователей</string>
+    <string name="users_15">15 пользователей</string>
+    <string name="users_25">25 пользователей</string>
+    <string name="users_50">50 пользователей</string>
+    <string name="users_100">100 пользователей</string>
+    <string name="ET_DatabaseName">Заполните поле с названием Базы данных</string>
 </resources>

@@ -4,16 +4,13 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.provider.Settings.Global.getString
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import androidx.recyclerview.widget.RecyclerView
 import androidx.work.*
 import com.fgm.fgmanager.*
 import com.fgm.fgmanager.DBHelpers.DBHelper
-import com.fgm.fgmanager.PoJo.placeholder.PlaceholderContent
 import com.fgm.fgmanager.R
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
