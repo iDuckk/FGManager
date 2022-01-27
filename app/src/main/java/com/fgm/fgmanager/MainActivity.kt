@@ -31,16 +31,11 @@ import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 
 class MainActivity : AppCompatActivity() {
     //*************************************
-    // - Button Settings is GONE
-    // - Create Models for Product DB
-    // - AddProduct, CreateProduct, DeleteProduct
-    // - Added modelHelpers
-    // - Fun Quit
-    // - Added modelMyLogin
-    // - Added model ItemUsers
-    // - Added modelUpPassword
-    // - Added modelAdvertisement
-    // - Added Worker to modelHelpers. Doesnt work and now previous version doesnt work
+    // - Added Registration Model
+    // - Added IsAdmin (001 - Admin)
+    // - Replace Strings to STORAGE
+    // - Added isOnline User. modelHelpers Change true. modelLogIn false
+    // TODO RxJava, чтобы при выходе isOnline менялась
     //*************************************
 
     //val CAMERA_RQ = 102
@@ -68,6 +63,12 @@ class MainActivity : AppCompatActivity() {
 //        mActivity.notificationDate(username) //notification
 
         //checkForPermissions(android.Manifest.permission.CAMERA, "camera", CAMERA_RQ)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        val modelHelpers = modelHelpers(this)
+        modelHelpers.isOnlineUserLogOut()
     }
 
     private fun createNotificationChannel() {

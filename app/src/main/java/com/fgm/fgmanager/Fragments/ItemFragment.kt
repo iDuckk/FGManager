@@ -20,6 +20,7 @@ import com.fgm.fgmanager.DBHelpers.DBHelperLogIn
 import com.fgm.fgmanager.Models.modelAdvertisment
 import com.fgm.fgmanager.Models.modelForProductItems
 import com.fgm.fgmanager.Models.modelHelpers
+import com.fgm.fgmanager.Models.modelMyLogin
 import com.fgm.fgmanager.PoJo.placeholder.PlaceholderContent
 import com.google.android.gms.ads.AdView
 import com.google.firebase.database.DataSnapshot

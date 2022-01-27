@@ -7,6 +7,7 @@ import android.app.NotificationManager
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
+import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.annotation.RequiresApi
@@ -27,6 +28,8 @@ import com.fgm.fgmanager.STORAGE
 import com.fgm.fgmanager.WorkerManagers.DailyWorker
 import com.fgm.fgmanager.WorkerManagers.DailyWorkerFSdb
 import com.google.android.material.internal.ContextUtils.getActivity
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -97,6 +100,7 @@ class modelHelpers(val activity: MainActivity) {
             .setPositiveButton(R.string.Answer_Delete_Item_Yes){
                     dialog, id ->
                 if(STORAGE.TypeAccFree) {
+                    isOnlineUserLogOut()
                     val dbSaveLogin = DBHelperLogIn(view.context, null)
                     dbSaveLogin.deleteCourse(STORAGE.UserName)
                 }
@@ -108,5 +112,23 @@ class modelHelpers(val activity: MainActivity) {
             .setNegativeButton(R.string.Answer_Delete_Item_No, null)
             .create()
         dialog.show()
+    }
+
+    fun isOnlineUserLogOut(){
+        val dbFSAddIsOnline = Firebase.firestore
+
+        val resultNameOfCollection = STORAGE.UserName.split("0")[0] //Delete Number of Users from end of the line
+        val docRef = dbFSAddIsOnline.collection(resultNameOfCollection).document(STORAGE.docPathLogInDB)
+
+        val updates = hashMapOf<String, Any>( //Create new element for Fire Store
+            STORAGE.collectionUser to STORAGE.UserName,
+            STORAGE.collectionPassword to STORAGE.Password,
+            STORAGE.collectionIsOnline to true
+        )
+
+        docRef
+            .update(STORAGE.UserName, updates)   //Replace Element in FS
+            .addOnSuccessListener { Log.d("TAG", "DocumentSnapshot successfully updated!") }
+            .addOnFailureListener { e -> Log.w("TAG", "Error updating document", e) }
     }
 }

@@ -43,4 +43,5 @@
     <string name="users_50">50 Users</string>
     <string name="users_100">100 Users</string>
     <string name="ET_DatabaseName">Fill the gap of Database\'s name</string>
+    <string name="UncorrectNameOrPassword">Invalid Username or Password</string>
 </resources>

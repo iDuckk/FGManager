@@ -25,7 +25,7 @@ class modelUsersList(val activity: MainActivity) {
 
         val resultNameOfCollection =
             STORAGE.UserName.split("0")[0] //Delete Number of Users from end of the line
-        val docRef = dbFSUsers.collection(resultNameOfCollection).document("Users")
+        val docRef = dbFSUsers.collection(resultNameOfCollection).document(STORAGE.docPathLogInDB)
         docRef.addSnapshotListener() { snapshot, e -> //MetadataChanges.INCLUDE
             if (e != null) {
                 Log.w("TAG", "Listen failed.", e)
@@ -44,8 +44,8 @@ class modelUsersList(val activity: MainActivity) {
                 data.forEach { t, u ->          //Add Items in Array for each
                     STORAGE.ITEMS.add(
                         User(
-                            "${u!!.get("User")}",
-                            "${u!!.get("Password")}",
+                            "${u!!.get(STORAGE.collectionUser)}",
+                            "${u!!.get(STORAGE.collectionPassword)}",
                         )
                     )
                 }
@@ -54,7 +54,7 @@ class modelUsersList(val activity: MainActivity) {
                 Log.d("TAG", "$source data: null")
             }
             //Last Item FOR BUTTON
-            STORAGE.ITEMS.add(User("Button",""))
+            STORAGE.ITEMS.add(User(STORAGE.buttonString,""))
             progressBar.visibility = View.INVISIBLE
 //            PlaceholderContent.ITEMS.sortBy { it.numberForSorting } // Sorting of List
             RecView.adapter?.notifyDataSetChanged()    // If change, Reload Recycler View

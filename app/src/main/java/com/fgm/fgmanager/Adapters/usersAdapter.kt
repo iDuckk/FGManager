@@ -63,7 +63,7 @@ class usersAdapter(
                 .navigate(R.id.action_itemUsersFragment_to_updatePasswordFragment) // Go to Create New Password Fragment
         }
 
-        if(item.User == "Button"){  //Button For Return Back to MENU
+        if(item.User == STORAGE.buttonString){  //Button For Return Back to MENU
             holder.et_UserName.visibility = View.GONE
             holder.et_UserPassword.visibility = View.GONE
             holder.im_Edit_Item.visibility = View.GONE

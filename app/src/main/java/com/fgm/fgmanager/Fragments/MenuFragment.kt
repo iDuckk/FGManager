@@ -76,9 +76,15 @@ class MenuFragment : Fragment() {
                 }
             }
         )
-
-        b_Users.setOnClickListener{
-            Navigation.findNavController(view).navigate(R.id.action_menuFragment_to_itemUsersFragment)
+        //If we Admin we Allow of List Users for Change Password
+        if(STORAGE.isAdmin == STORAGE.Admin) {
+            b_Users.visibility = View.VISIBLE
+            b_Users.setOnClickListener {
+                Navigation.findNavController(view)
+                    .navigate(R.id.action_menuFragment_to_itemUsersFragment)
+            }
+        }else{
+            b_Users.visibility = View.GONE
         }
 
         //Return to ItemFragment

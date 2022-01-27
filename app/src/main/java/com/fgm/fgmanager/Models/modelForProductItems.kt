@@ -35,7 +35,7 @@ class modelForProductItems(val ctx : Context?) { //(Rec : RecyclerView)
         var numOfSorting: Int = 0
 
         val formatter: DateTimeFormatter =
-            DateTimeFormatter.ofPattern("d/M/yyyy")  //Format for Date
+            DateTimeFormatter.ofPattern(STORAGE.dateFormat)  //Format for Date
         val value = LocalDate.now().format(formatter) // Current Date
         val parseDateNow = LocalDate.parse(
             value,
@@ -43,7 +43,7 @@ class modelForProductItems(val ctx : Context?) { //(Rec : RecyclerView)
         )      //This Argument for counting number of days. If I set it in TextView, that Format is YYYY/MM/DD...
 
         val resultNameOfCollection = STORAGE.UserName.split("0")[0] //Delete Number of Users from end of the line
-        val docRef = dbFS.collection(resultNameOfCollection).document("DataBase")
+        val docRef = dbFS.collection(resultNameOfCollection).document(STORAGE.docPathProductDB)
         docRef.addSnapshotListener() { snapshot, e -> //MetadataChanges.INCLUDE
             if (e != null) {
                 Log.w("TAG", "Listen failed.", e)
@@ -61,17 +61,17 @@ class modelForProductItems(val ctx : Context?) { //(Rec : RecyclerView)
 
                 data.forEach { t, u ->          //Add Items in Array for each
                     val parseDateItem =
-                        LocalDate.parse("${u!!.get("productDate")}".toString(),formatter) //Date of Product
+                        LocalDate.parse("${u!!.get(STORAGE.ProductDate)}".toString(),formatter) //Date of Product
                     val numberOfDays = ChronoUnit.DAYS.between(parseDateNow, parseDateItem)
                     if (numberOfDays.toInt() > 0) countedAmountDay = numberOfDays.toString() else countedAmountDay = "" // If amount Of days lower then Zero
                     if (numberOfDays.toInt() > 0) numOfSorting = numberOfDays.toInt() else numOfSorting = 0 // If amount Of days lower then Zero for num of Sorting
                     PlaceholderContent.ITEMS.add(
                         PlaceholderContent.PlaceholderItem(
-                            "${u!!.get("productName")}",
-                            "${u!!.get("productBarcode")}",
-                            "${u!!.get("productDate")}",
+                            "${u!!.get(STORAGE.ProductName)}",
+                            "${u!!.get(STORAGE.ProductBarcode)}",
+                            "${u!!.get(STORAGE.ProductDate)}",
                             countedAmountDay,//"${u!!.get("amountDays")}"
-                            "${u!!.get("keyProduct")}",
+                            "${u!!.get(STORAGE.ProductKey)}",
                             numOfSorting
                         )
                     )
@@ -90,7 +90,7 @@ class modelForProductItems(val ctx : Context?) { //(Rec : RecyclerView)
         var countedAmountDay: String = "0"
         var numOfSorting: Int = 0
         val formatter: DateTimeFormatter =
-            DateTimeFormatter.ofPattern("d/M/yyyy")  //Format for Date
+            DateTimeFormatter.ofPattern(STORAGE.dateFormat)  //Format for Date
         val value = LocalDate.now().format(formatter) // Current Date
         val parseDateNow = LocalDate.parse(
             value,
@@ -209,7 +209,7 @@ class modelForProductItems(val ctx : Context?) { //(Rec : RecyclerView)
         val dbFSDelete = Firebase.firestore
         //Add new Item in Firestore
         val resultNameOfCollection = STORAGE.UserName.split("0")[0] //Delete Number of Users from end of the line
-        val docRef = dbFSDelete.collection(resultNameOfCollection).document("DataBase")
+        val docRef = dbFSDelete.collection(resultNameOfCollection).document(STORAGE.docPathProductDB)
         // Remove the 'Item with number of keyProduct' field from the document
         val updates = hashMapOf<String, Any>(
             "${ItemId}" to FieldValue.delete()
@@ -224,7 +224,7 @@ class modelForProductItems(val ctx : Context?) { //(Rec : RecyclerView)
         item.keyProduct = currentDate.time.toString().trim()
         val user = mapOf<String, PlaceholderContent.PlaceholderItem>(currentDate.time.toString().trim() to item) //Create Map for sending NameOfMapProd.toString()
         val resultNameOfCollection = STORAGE.UserName.split("0")[0] //Delete Number of Users from end of the line
-        dbFSName.collection(resultNameOfCollection).document("DataBase")   //Создаёт Новый Документ. Set Стирает данные документа и перезаписывает данные
+        dbFSName.collection(resultNameOfCollection).document(STORAGE.docPathProductDB)   //Создаёт Новый Документ. Set Стирает данные документа и перезаписывает данные
             .set(user, SetOptions.merge()) // Без SetOptions.merge(), Set перезапишет данные
             .addOnSuccessListener { Log.d("TAG", "DocumentSnapshot successfully written!") }
             .addOnFailureListener { e -> Log.w("TAG", "Error writing document", e) }

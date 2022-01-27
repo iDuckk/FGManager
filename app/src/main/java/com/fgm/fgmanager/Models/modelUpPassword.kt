@@ -13,11 +13,11 @@ class modelUpPassword(val ctx : Context?) {
         val dbFSUpdatePass = Firebase.firestore
 
         val resultNameOfCollection = STORAGE.UserName.split("0")[0] //Delete Number of Users from end of the line
-        val docRef = dbFSUpdatePass.collection(resultNameOfCollection).document("Users")
+        val docRef = dbFSUpdatePass.collection(resultNameOfCollection).document(STORAGE.docPathLogInDB)
 
         val updates = hashMapOf<String, Any>( //Create new element for Fire Store
-            "Password" to newPass.toString(),
-            "User" to userName
+            STORAGE.collectionPassword to newPass.toString(),
+            STORAGE.collectionUser to userName
         )
 
         docRef

@@ -47,7 +47,7 @@ class modelCreateFragment(val activity: MainActivity) {
         //Add new Item in Firestore NameDataBase
         val user = mapOf<String, SaveProductNameDB>(currentDate.time.toString().trim() to item) //Create Map for sending
         val resultNameOfCollection = STORAGE.UserName.split("0")[0] //Delete Number of Users from end of the line
-        dbFSSaveName.collection(resultNameOfCollection).document("NameDataBase")   //Создаёт Новый Документ. Set Стирает данные документа и перезаписывает данные
+        dbFSSaveName.collection(resultNameOfCollection).document(STORAGE.docPathSavedNameDB)   //Создаёт Новый Документ. Set Стирает данные документа и перезаписывает данные
             .set(user, SetOptions.merge()) // Без SetOptions.merge(), Set перезапишет данные
             .addOnSuccessListener { Log.d("TAG", "DocumentSnapshot successfully written!") }
             .addOnFailureListener { e -> Log.w("TAG", "Error writing document", e) }
@@ -67,7 +67,7 @@ class modelCreateFragment(val activity: MainActivity) {
         val dbFSNameCreate = Firebase.firestore
         var arrayOfSaveProducts: ArrayList<SaveProductNameDB> = ArrayList()
         val resultNameOfCollection = STORAGE.UserName.split("0")[0] //Delete Number of Users from end of the line
-        val docRef = dbFSNameCreate.collection(resultNameOfCollection).document("NameDataBase")
+        val docRef = dbFSNameCreate.collection(resultNameOfCollection).document(STORAGE.docPathSavedNameDB)
         docRef.addSnapshotListener() { snapshot, e -> //MetadataChanges.INCLUDE
             if (e != null) {
                 Log.w("TAG", "Listen failed.", e)
@@ -85,8 +85,8 @@ class modelCreateFragment(val activity: MainActivity) {
                 data.forEach { t, u ->      //Add Items in Array for each
                     arrayOfSaveProducts.add(
                         SaveProductNameDB(
-                            "${u!!.get("productName")}",
-                            "${u!!.get("productBarcode")}",
+                            "${u!!.get(STORAGE.ProductName)}",
+                            "${u!!.get(STORAGE.ProductBarcode)}",
                         )
                     )
                 }

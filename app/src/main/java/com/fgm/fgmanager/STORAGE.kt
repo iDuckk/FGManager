@@ -17,6 +17,15 @@ class STORAGE {
         const val FireBasePath = "Product"
         const val FireBasePathForSaveProduct = "ProductDB"
 
+        //DataBase FireStore
+        val docPathSavedNameDB = "NameDataBase"
+        val docPathProductDB = "DataBase"
+        val ProductName = "productName"
+        val ProductDate = "productDate"
+        val ProductKey = "keyProduct"
+        val ProductBarcode = "productBarcode"
+        val dateFormat = "d/M/yyyy"
+
         //DataBaseOfItemFragment When Log in
        var TypeAccFree : Boolean = false
 
@@ -24,8 +33,16 @@ class STORAGE {
         val TABLE_PRODUCTS = "products_table"
         val TABLE_NAME_PRODUCTS = "productsName_table"
 
-        //Store Data Base
+        //Store Data Base LogIn
+        var docPathLogInDB = "Users"
+        var collectionUser = "User"
+        var collectionPassword = "Password"
+        var collectionIsOnline = "isOnline"
         var UserName = ""
+        var Password = ""
+        var isAdmin = ""
+        val Admin = "001"
+        var isOnline : Boolean = true
 
         //DailyWorkers
         val HOUR : Int = 10
@@ -53,9 +70,9 @@ class STORAGE {
 
         //ListUsers in Menu
         val ITEMS: MutableList<User> = ArrayList()
-        var checkPressOtherRow : Boolean = true
         var OldPassword : String = ""
         var userNameForChangePass : String = ""
+        val buttonString = "Button"
 
         //Quit Fun From model Helpers
         val itemFrag = "ItemFragment"
