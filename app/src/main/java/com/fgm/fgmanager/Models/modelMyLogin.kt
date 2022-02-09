@@ -22,6 +22,7 @@ class modelMyLogin(val view: View, val activity: MainActivity) {
     fun isNotFirstLogIn(){
         val dbSaveLogin = DBHelperLogIn(view.context, null)
         val cursor = dbSaveLogin.getUser()
+        STORAGE.isOnline = true
         cursor!!.moveToFirst()
         if(cursor.count != 0) {
             var userName = cursor.getString(cursor.getColumnIndex(DBHelperLogIn.USER_NAME)).toString()
@@ -50,7 +51,10 @@ class modelMyLogin(val view: View, val activity: MainActivity) {
                         if (document != null && document.exists()) {
                             val users: Map<String, String> =
                                 document?.get(username) as Map<String, String>
-                            if (users.get(STORAGE.collectionUser) == username && users.get(STORAGE.collectionPassword) == password && users.get(STORAGE.collectionIsOnline) as Boolean) { //Authentication
+                            if (users.get(STORAGE.collectionUser) == username
+                                && users.get(STORAGE.collectionPassword) == password
+                                && (users.get(STORAGE.collectionIsOnline) as Boolean) || STORAGE.isOnline) { //Authentication
+
                                 dbSaveLogin.addUser(username, password)
                                 progressBar.visibility = View.VISIBLE
                                 STORAGE.TypeAccFree = true

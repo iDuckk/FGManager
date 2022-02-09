@@ -30,6 +30,10 @@ import com.fgm.fgmanager.WorkerManagers.DailyWorkerFSdb
 import com.google.android.material.internal.ContextUtils.getActivity
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Scheduler
+import io.reactivex.rxjava3.core.Single
+import io.reactivex.rxjava3.schedulers.Schedulers
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -114,7 +118,17 @@ class modelHelpers(val activity: MainActivity) {
         dialog.show()
     }
 
-    fun isOnlineUserLogOut(){
+        fun isOnlineUserLogOut(){
+            sentIsOnlineUserLogOut()
+                .subscribeOn(Schedulers.io())
+                .subscribe ( {
+                    Log.w("TAG", "logOut")
+                },{
+                    Log.w("TAG", "Error: not logOut")
+                })
+    }
+
+    fun sentIsOnlineUserLogOut(): Completable {
         val dbFSAddIsOnline = Firebase.firestore
 
         val resultNameOfCollection = STORAGE.UserName.split("0")[0] //Delete Number of Users from end of the line
@@ -126,9 +140,32 @@ class modelHelpers(val activity: MainActivity) {
             STORAGE.collectionIsOnline to true
         )
 
-        docRef
-            .update(STORAGE.UserName, updates)   //Replace Element in FS
-            .addOnSuccessListener { Log.d("TAG", "DocumentSnapshot successfully updated!") }
-            .addOnFailureListener { e -> Log.w("TAG", "Error updating document", e) }
+        return Completable.create { emitter ->
+            docRef
+                .update(STORAGE.UserName, updates)   //Replace Element in FS
+                .addOnSuccessListener { emitter.onComplete() }
+                .addOnFailureListener { emitter.onError(it) }
+        }
     }
+
+
+
+//    fun isOnlineUserLogOut1(){
+//        val dbFSAddIsOnline = Firebase.firestore
+//
+//        val resultNameOfCollection = STORAGE.UserName.split("0")[0] //Delete Number of Users from end of the line
+//        val docRef = dbFSAddIsOnline.collection(resultNameOfCollection).document(STORAGE.docPathLogInDB)
+//
+//        val updates = hashMapOf<String, Any>( //Create new element for Fire Store
+//            STORAGE.collectionUser to STORAGE.UserName,
+//            STORAGE.collectionPassword to STORAGE.Password,
+//            STORAGE.collectionIsOnline to true
+//        )
+//
+//        docRef
+//            .update(STORAGE.UserName, updates)   //Replace Element in FS
+//            .addOnSuccessListener { Log.d("TAG", "DocumentSnapshot successfully updated!") }
+//            .addOnFailureListener { e -> Log.w("TAG", "Error updating document", e) }
+//    }
+
 }

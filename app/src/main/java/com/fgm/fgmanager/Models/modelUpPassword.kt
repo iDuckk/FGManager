@@ -14,10 +14,10 @@ class modelUpPassword(val ctx : Context?) {
 
         val resultNameOfCollection = STORAGE.UserName.split("0")[0] //Delete Number of Users from end of the line
         val docRef = dbFSUpdatePass.collection(resultNameOfCollection).document(STORAGE.docPathLogInDB)
-
         val updates = hashMapOf<String, Any>( //Create new element for Fire Store
             STORAGE.collectionPassword to newPass.toString(),
-            STORAGE.collectionUser to userName
+            STORAGE.collectionUser to userName,
+            STORAGE.collectionIsOnline to true
         )
 
         docRef
@@ -25,23 +25,14 @@ class modelUpPassword(val ctx : Context?) {
             .addOnSuccessListener { Log.d("TAG", "DocumentSnapshot successfully updated!") }
             .addOnFailureListener { e -> Log.w("TAG", "Error updating document", e) }
 
-        isAdminPass(STORAGE.UserName.toString(), newPass.toString()) // If we change our own Password.
+        isAdminPass(userName, newPass.toString()) // If we change our own Password.
     }
 
     fun isAdminPass(name : String, Pass : String){
         //Take Name User for ChangePass. When we login
-        var userName : String = ""
         val dbNewPass = DBHelperLogIn(ctx!!, null)
 
-        //Take Name User
-        val cursor = dbNewPass.getUser()
-        cursor!!.moveToFirst()
-        if(cursor.count != 0) {
-            userName = cursor.getString(cursor.getColumnIndex(DBHelperLogIn.USER_NAME)).toString()
-        }
-        cursor.close()
-
-        if(userName == STORAGE.UserName) {
+        if(name == STORAGE.UserName) {
             dbNewPass.deleteCourse(STORAGE.UserName)
             dbNewPass.addUser(name, Pass)
         }

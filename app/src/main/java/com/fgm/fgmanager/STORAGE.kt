@@ -42,7 +42,7 @@ class STORAGE {
         var Password = ""
         var isAdmin = ""
         val Admin = "001"
-        var isOnline : Boolean = true
+        var isOnline : Boolean = false //For Rejoin to account. When you do not LogOut
 
         //DailyWorkers
         val HOUR : Int = 10

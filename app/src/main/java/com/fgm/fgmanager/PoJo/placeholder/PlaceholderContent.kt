@@ -15,7 +15,7 @@ import com.google.firebase.ktx.Firebase
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
-import java.util.ArrayList
+import java.util.*
 
 /**
  * Helper class for providing sample content for user interfaces created by
@@ -40,12 +40,12 @@ object PlaceholderContent {
     //private val COUNT = 25
     //private var COUNT = addFireBaseList().size - 1
 
-    init {
-        // Add some sample items.
-        /*for (i in 0..COUNT) {
-            addItem(createPlaceholderItem(i))
-        }*/
-    }
+//    init {
+//        // Add some sample items.
+//        /*for (i in 0..COUNT) {
+//            addItem(createPlaceholderItem(i))
+//        }*/
+//    }
 
     /*private fun addItem(item: PlaceholderItem) {
         ITEMS.add(item)
@@ -75,7 +75,7 @@ object PlaceholderContent {
      * A placeholder item representing a piece of content.
      */
     data class PlaceholderItem(var productName: String = "", val productBarcode: String = "", val productDate: String = "", var amountDays: String = "",
-                               var keyProduct: String = "", var numberForSorting: Int = 0) { //val id: String, val content: String, val details: String
+                               var keyProduct: String = "", var numberForSorting: Int = 0, var id : Int = 0) { //val id: String, val content: String, val details: String
         //override fun toString(): String = content
     }
 }

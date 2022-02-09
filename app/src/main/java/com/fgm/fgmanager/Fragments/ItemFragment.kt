@@ -1,6 +1,6 @@
 package com.fgm.fgmanager.Fragments
 
-import android.app.AlertDialog
+import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -12,35 +12,27 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.Navigation
 import com.fgm.fgmanager.*
 import com.fgm.fgmanager.Adapters.MyItemRecyclerViewAdapter
-import com.fgm.fgmanager.DBHelpers.DBHelper
-import com.fgm.fgmanager.DBHelpers.DBHelperLogIn
-import com.fgm.fgmanager.Models.modelAdvertisment
 import com.fgm.fgmanager.Models.modelForProductItems
 import com.fgm.fgmanager.Models.modelHelpers
-import com.fgm.fgmanager.Models.modelMyLogin
 import com.fgm.fgmanager.PoJo.placeholder.PlaceholderContent
 import com.google.android.gms.ads.AdView
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-import java.time.temporal.ChronoUnit
-import java.util.*
+import io.reactivex.rxjava3.core.Observable
 
 /**
  * A fragment representing a list of Items.
  */
 
+var myAdapter : MyItemRecyclerViewAdapter  = MyItemRecyclerViewAdapter()
+
 class ItemFragment : Fragment() {
 
     private var columnCount = 1
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -95,6 +87,7 @@ class ItemFragment : Fragment() {
 //                    STORAGE.AdPressButton = false
 //                }
 //            }
+
                 Navigation.findNavController(view)
                 .navigate(R.id.action_itemFragment_to_craeteDateFragment) // Go to Create Fragment
         }
@@ -127,13 +120,21 @@ class ItemFragment : Fragment() {
                     columnCount <= 1 -> LinearLayoutManager(context)
                     else -> GridLayoutManager(context, columnCount)
                 }
+                view.itemAnimator = null
                 //Set Database for RecViewList
                 if(STORAGE.TypeAccFree){
-                    model.CreateFireStoreDB(view)     //FireStore DB
+                    adapter = myAdapter
+                    model.insertItemsList(view, myAdapter)
+//                    myAdapter.values = PlaceholderContent.ITEMS
+//                    if(model.CreateFireStoreDB(view)) //When Db download set List
+//                    {
+//                        myAdapter.values = PlaceholderContent.ITEMS
+//                    }
                 }else{
+                    adapter = myAdapter
                     model.CreateLocalDataBase(view)//Offline DataBase
+                    myAdapter.values = PlaceholderContent.ITEMS
                 }
-                adapter = MyItemRecyclerViewAdapter(PlaceholderContent.ITEMS)
                 progressBar.visibility = View.INVISIBLE
             }
         }

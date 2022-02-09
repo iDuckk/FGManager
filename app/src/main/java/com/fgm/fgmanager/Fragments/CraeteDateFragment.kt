@@ -180,13 +180,18 @@ class CraeteDateFragment : Fragment() {
                         STORAGE.booleanForCheckExistsOfNameOfProducts = false
                     }
 
-                    model.addItemsForFireStoreDB(
-                        PlaceholderContent.PlaceholderItem(
-                        et_NameProduct.text.toString(),
-                        et_Barcode.text.toString(),
-                        tv_Date.text.toString(),
-                        amountDays,
-                        "0"))
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        model.addItemsForFireStoreDB(
+                            PlaceholderContent.PlaceholderItem(
+                            et_NameProduct.text.toString(),
+                            et_Barcode.text.toString(),
+                            tv_Date.text.toString(),
+                            amountDays,
+                            "0",
+                            0,
+                                0
+                            ))
+                    }
                 }else{
                     //LOCAL DATA BASE if Free account
                         if(arrayOfSaveprod.count() == 0){

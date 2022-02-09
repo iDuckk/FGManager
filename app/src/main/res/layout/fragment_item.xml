@@ -4,8 +4,9 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_margin="3dp"
-    android:orientation="horizontal">
+    android:layout_margin="5dp"
+    android:orientation="horizontal"
+    app:cardCornerRadius="3dp">
 
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
@@ -67,7 +68,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_amount_days"
             app:srcCompat="@android:drawable/ic_input_add"
-            android:background="@color/grey"/>
+            android:background="@color/gray"/>
 
         <ImageView
             android:id="@+id/im_Delete_Item"

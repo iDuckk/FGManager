@@ -1,23 +1,19 @@
 package com.fgm.fgmanager.Adapters
 
-import android.app.AlertDialog
 import android.content.Context
+import android.os.Build
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.navigation.Navigation
-import com.fgm.fgmanager.DBHelpers.DBHelper
+import androidx.annotation.RequiresApi
+import androidx.recyclerview.widget.DiffUtil
 import com.fgm.fgmanager.Models.modelForProductItems
 import com.fgm.fgmanager.PoJo.placeholder.PlaceholderContent.PlaceholderItem
 import com.fgm.fgmanager.R
-import com.fgm.fgmanager.STORAGE
 import com.fgm.fgmanager.databinding.FragmentItemBinding
-import com.google.firebase.firestore.FieldValue
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 
 /**
  * [RecyclerView.Adapter] that can display a [PlaceholderItem].
@@ -25,8 +21,16 @@ import com.google.firebase.ktx.Firebase
  */
 var par : Context? = null
 class MyItemRecyclerViewAdapter(
-    private val values: List<PlaceholderItem>
+//    private val valuesReceivedList: MutableList<PlaceholderItem>
 ) : RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder>() {
+
+    var values : MutableList<PlaceholderItem> = ArrayList()
+    set(value) {
+        val callback = ItemsListCallback(values, value)  //values is oldList, value is newList
+        val diffResult = DiffUtil.calculateDiff(callback, false)
+        field = value
+        diffResult.dispatchUpdatesTo(this)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         par = parent.context
@@ -41,6 +45,7 @@ class MyItemRecyclerViewAdapter(
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = values[position]
         val model = modelForProductItems(par)
@@ -53,7 +58,8 @@ class MyItemRecyclerViewAdapter(
 
         SetColorPriorityRecycleView(holder, position)   //Set Color Priority
         SetTextItemRecycleView(holder, position)       //Set Text Recycle view
-        model.DialogToDelete(holder, (item.keyProduct))              //Delete Item
+        model.DialogToDelete(holder, item.keyProduct, position)              //Delete Item
+
     }
 
     override fun getItemCount(): Int = values.size
@@ -85,7 +91,7 @@ class MyItemRecyclerViewAdapter(
                     amountInt <= 30 -> holder.tv_Item_NameProduct.setBackgroundResource(R.color.orange)
                 }
             } else
-                holder.tv_Item_NameProduct.setBackgroundResource(R.color.grey)
+                holder.tv_Item_NameProduct.setBackgroundResource(R.color.gray)
     }
 
     fun SetTextItemRecycleView(holder: ViewHolder, pos : Int){
@@ -104,4 +110,5 @@ class MyItemRecyclerViewAdapter(
             holder.tv_Item_Amout.setText(" $amountInt")
         }
     }
+
 }

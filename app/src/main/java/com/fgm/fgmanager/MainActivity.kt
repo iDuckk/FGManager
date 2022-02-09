@@ -3,26 +3,19 @@ package com.fgm.fgmanager
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.app.PendingIntent
 import android.content.Context
-import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
+import android.util.Log
 import androidx.annotation.RequiresApi
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
 import androidx.work.*
 import com.fgm.fgmanager.Models.modelAdvertisment
 import com.fgm.fgmanager.Models.modelHelpers
 import com.fgm.fgmanager.WorkerManagers.DailyWorker
 import com.fgm.fgmanager.WorkerManagers.DailyWorkerFSdb
-import com.google.android.gms.ads.*
 import java.util.*
 import java.util.concurrent.TimeUnit
-import com.google.android.gms.ads.interstitial.InterstitialAd
-import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 
 //val database = FirebaseDatabase.getInstance()
 //val NOTIFICATION_ID = 101
@@ -31,11 +24,7 @@ import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 
 class MainActivity : AppCompatActivity() {
     //*************************************
-    // - Added Registration Model
-    // - Added IsAdmin (001 - Admin)
-    // - Replace Strings to STORAGE
-    // - Added isOnline User. modelHelpers Change true. modelLogIn false
-    // TODO RxJava, чтобы при выходе isOnline менялась
+
     //*************************************
 
     //val CAMERA_RQ = 102
@@ -50,7 +39,7 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.hide()
         createNotificationChannel()//зарегистрировать канал уведомлений, Вызвать при запуске приложения
 
-        val modelHelp = modelHelpers(this)
+        //val modelHelp = modelHelpers(this)
         val modelAdv = modelAdvertisment(this)
         modelAdv.initAdMob() //Initialized Banner
         modelAdv.loadInterAD() //Load Fullscreen Ad
@@ -65,11 +54,6 @@ class MainActivity : AppCompatActivity() {
         //checkForPermissions(android.Manifest.permission.CAMERA, "camera", CAMERA_RQ)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        val modelHelpers = modelHelpers(this)
-        modelHelpers.isOnlineUserLogOut()
-    }
 
     private fun createNotificationChannel() {
         // Create the NotificationChannel, but only on API 26+ because
