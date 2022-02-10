@@ -27,7 +27,7 @@ class MyItemRecyclerViewAdapter(
     var values : MutableList<PlaceholderItem> = ArrayList()
     set(value) {
         val callback = ItemsListCallback(values, value)  //values is oldList, value is newList
-        val diffResult = DiffUtil.calculateDiff(callback, false)
+        val diffResult = DiffUtil.calculateDiff(callback)
         field = value
         diffResult.dispatchUpdatesTo(this)
     }

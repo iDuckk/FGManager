@@ -120,18 +120,14 @@ class ItemFragment : Fragment() {
                     columnCount <= 1 -> LinearLayoutManager(context)
                     else -> GridLayoutManager(context, columnCount)
                 }
-                view.itemAnimator = null
+                //view.itemAnimator = null
+                adapter = myAdapter
                 //Set Database for RecViewList
                 if(STORAGE.TypeAccFree){
-                    adapter = myAdapter
-                    model.insertItemsList(view, myAdapter)
-//                    myAdapter.values = PlaceholderContent.ITEMS
-//                    if(model.CreateFireStoreDB(view)) //When Db download set List
-//                    {
-//                        myAdapter.values = PlaceholderContent.ITEMS
-//                    }
+                if(PlaceholderContent.ITEMS.isEmpty()){
+                    model.CreateFireStoreDB(view, myAdapter)
+                }
                 }else{
-                    adapter = myAdapter
                     model.CreateLocalDataBase(view)//Offline DataBase
                     myAdapter.values = PlaceholderContent.ITEMS
                 }

@@ -11,6 +11,7 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.fgm.fgmanager.Adapters.MyItemRecyclerViewAdapter
 import com.fgm.fgmanager.DBHelpers.DBHelper
+import com.fgm.fgmanager.DBHelpers.DBHelperLogIn
 import com.fgm.fgmanager.PoJo.placeholder.PlaceholderContent
 import com.fgm.fgmanager.R
 import com.fgm.fgmanager.STORAGE
@@ -19,6 +20,7 @@ import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Completable
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
@@ -31,7 +33,9 @@ class modelForProductItems(val ctx : Context?) { //(Rec : RecyclerView)
 
     @SuppressLint("NotifyDataSetChanged")
     @RequiresApi(Build.VERSION_CODES.O)
-    fun insertItemsList(RecView: RecyclerView, adapter: MyItemRecyclerViewAdapter){
+    fun CreateFireStoreDB(Rec : RecyclerView, adapter: MyItemRecyclerViewAdapter){ //RecView : RecyclerView
+        val dbFS = Firebase.firestore
+
         var countedAmountDay: String = "0"
         var numOfSorting: Int = 0
 
@@ -43,13 +47,22 @@ class modelForProductItems(val ctx : Context?) { //(Rec : RecyclerView)
             formatter
         )      //This Argument for counting number of days. If I set it in TextView, that Format is YYYY/MM/DD...
 
-        // Add the List to the Database
-        getRealTimeCollection()
-            ?.subscribeOn(Schedulers.io()) // Background thread
-            ?.subscribe({ data ->   //            ?.observeOn(AndroidSchedulers.mainThread())
+        val resultNameOfCollection = STORAGE.UserName.split("0")[0] //Delete Number of Users from end of the line
+        val docRef = dbFS.collection(resultNameOfCollection).document(STORAGE.docPathProductDB)
+        docRef.addSnapshotListener() { snapshot, e -> //MetadataChanges.INCLUDE
+            if (e != null) {
+                Log.w("TAG", "Listen failed.", e)
+                return@addSnapshotListener
+            }
+
+            val source = if (snapshot != null && snapshot.metadata.hasPendingWrites())
+                "Local"
+            else
+                "Server"
+            if (snapshot != null && snapshot.exists()) {
+                val data = snapshot.data as Map<String, MutableMap<String, String>>
                 if(PlaceholderContent.ITEMS.size > 0) PlaceholderContent.ITEMS.clear() //CLear up ItemsList.
-                var id : Int = 0
-                Log.w("TAG", "Observe")
+                Log.d("TAG", "Observe")
                 data.forEach { t, u ->          //Add Items in Array for each
                     val parseDateItem =
                         LocalDate.parse("${u!!.get(STORAGE.ProductDate)}".toString(),formatter) //Date of Product
@@ -64,104 +77,17 @@ class modelForProductItems(val ctx : Context?) { //(Rec : RecyclerView)
                             countedAmountDay,//"${u!!.get("amountDays")}"
                             "${u!!.get(STORAGE.ProductKey)}",
                             numOfSorting,
-                            id++
                         )
                     )
                 }
-                //RecView.adapter = adapter
-                PlaceholderContent.ITEMS.sortBy { it.numberForSorting } // Sorting of List
-                val list = PlaceholderContent.ITEMS.toMutableList() //That adapter think, it is new list
-                adapter.values = list
-            }, { exception -> Log.w("TAG", "Listen failed.", exception) })
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun getRealTimeCollection(): Observable<Map<String, MutableMap<String, String>>> {
-        val dbFS = Firebase.firestore
-        val resultNameOfCollection = STORAGE.UserName.split("0")[0] //Delete Number of Users from end of the line
-
-        return Observable.create { emitter ->
-            val docRef = dbFS.collection(resultNameOfCollection).document(STORAGE.docPathProductDB)
-                .addSnapshotListener{ snapshot, e ->
-                    if (e != null) {
-                        Log.w("TAG", "Listen failed.", e)
-                        emitter.onError(e)
-                        return@addSnapshotListener
-                    }
-
-                    if (snapshot != null && snapshot.exists()) {
-                        val data = snapshot.data as Map<String, MutableMap<String, String>>
-                        emitter.onNext(data)
-                    } else {
-                        Log.d("test", "Current data: null")
-
-                    }
-                }
-            emitter.setCancellable { docRef.remove() }
+            } else {
+                Log.d("TAG", "$source data: null")
+            }
+            PlaceholderContent.ITEMS.sortBy { it.numberForSorting } // Sorting of List
+            val list = PlaceholderContent.ITEMS.toMutableList() //That adapter think, it is new list
+            adapter.values = list
         }
     }
-
-//    @SuppressLint("NotifyDataSetChanged")
-//    @RequiresApi(Build.VERSION_CODES.O)
-//    fun CreateFireStoreDB(Rec : RecyclerView) : Boolean { //RecView : RecyclerView
-//        val dbFS = Firebase.firestore
-//
-//        var countedAmountDay: String = "0"
-//        var numOfSorting: Int = 0
-//
-//        val formatter: DateTimeFormatter =
-//            DateTimeFormatter.ofPattern(STORAGE.dateFormat)  //Format for Date
-//        val value = LocalDate.now().format(formatter) // Current Date
-//        val parseDateNow = LocalDate.parse(
-//            value,
-//            formatter
-//        )      //This Argument for counting number of days. If I set it in TextView, that Format is YYYY/MM/DD...
-//
-//        val resultNameOfCollection = STORAGE.UserName.split("0")[0] //Delete Number of Users from end of the line
-//        val docRef = dbFS.collection(resultNameOfCollection).document(STORAGE.docPathProductDB)
-//        docRef.addSnapshotListener() { snapshot, e -> //MetadataChanges.INCLUDE
-//            if (e != null) {
-//                Log.w("TAG", "Listen failed.", e)
-//                return@addSnapshotListener
-//            }
-//
-//            val source = if (snapshot != null && snapshot.metadata.hasPendingWrites())
-//                "Local"
-//            else
-//                "Server"
-//            var i = 0
-//            if (snapshot != null && snapshot.exists()) {
-//                val data = snapshot.data as Map<String, MutableMap<String, String>>
-//                if(PlaceholderContent.ITEMS.size > 0) PlaceholderContent.ITEMS.clear() //CLear up ItemsList.
-//                var id : Int = 0
-//                data.forEach { t, u ->          //Add Items in Array for each
-//                    Log.d("TAG", "${id++}")
-//                    val parseDateItem =
-//                        LocalDate.parse("${u!!.get(STORAGE.ProductDate)}".toString(),formatter) //Date of Product
-//                    val numberOfDays = ChronoUnit.DAYS.between(parseDateNow, parseDateItem)
-//                    if (numberOfDays.toInt() > 0) countedAmountDay = numberOfDays.toString() else countedAmountDay = "" // If amount Of days lower then Zero
-//                    if (numberOfDays.toInt() > 0) numOfSorting = numberOfDays.toInt() else numOfSorting = 0 // If amount Of days lower then Zero for num of Sorting
-//                    PlaceholderContent.ITEMS.add(
-//                        PlaceholderContent.PlaceholderItem(
-//                            "${u!!.get(STORAGE.ProductName)}",
-//                            "${u!!.get(STORAGE.ProductBarcode)}",
-//                            "${u!!.get(STORAGE.ProductDate)}",
-//                            countedAmountDay,//"${u!!.get("amountDays")}"
-//                            "${u!!.get(STORAGE.ProductKey)}",
-//                            numOfSorting,
-//                            id++
-//                        )
-//                    )
-//                }
-//            } else {
-//                Log.d("TAG", "$source data: null")
-//            }
-//            PlaceholderContent.ITEMS.sortBy { it.numberForSorting } // Sorting of List
-//            Rec.adapter?.notifyDataSetChanged()    // If change, Reload Recycler View
-//        }
-//        return true
-//    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun CreateLocalDataBase(RecView : RecyclerView) {
