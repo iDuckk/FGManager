@@ -31,7 +31,6 @@ object PlaceholderContent {
      * An array of sample (placeholder) items.
      */
     val ITEMS: MutableList<PlaceholderItem> = ArrayList()
-
     /**
      * A map of sample (placeholder) items, by ID.
      */
