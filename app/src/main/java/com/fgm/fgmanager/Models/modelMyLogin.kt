@@ -10,6 +10,8 @@ import com.fgm.fgmanager.R
 import com.fgm.fgmanager.STORAGE
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.schedulers.Schedulers
 
 class modelMyLogin(val view: View, val activity: MainActivity) {
 
@@ -20,17 +22,44 @@ class modelMyLogin(val view: View, val activity: MainActivity) {
     }
 
     fun isNotFirstLogIn(){
+        sentIsNotFirstLogIn()
+            .subscribeOn(Schedulers.io())
+            .subscribe ( {
+                Log.w("TAG", "logIn isOnline")
+            },{
+                Log.w("TAG", "Error: not logIn isOnline")
+            })
+    }
+
+    fun sentIsNotFirstLogIn(): Completable {
         val dbSaveLogin = DBHelperLogIn(view.context, null)
         val cursor = dbSaveLogin.getUser()
         STORAGE.isOnline = true
-        cursor!!.moveToFirst()
-        if(cursor.count != 0) {
-            var userName = cursor.getString(cursor.getColumnIndex(DBHelperLogIn.USER_NAME)).toString()
-            var password = cursor.getString(cursor.getColumnIndex(DBHelperLogIn.USER_PAS)).toString()
-            loginCloudFSMap(userName, password)
+
+
+        return Completable.create { emitter ->
+            cursor!!.moveToFirst()
+            if(cursor.count != 0) {
+                var userName = cursor.getString(cursor.getColumnIndex(DBHelperLogIn.USER_NAME)).toString()
+                var password = cursor.getString(cursor.getColumnIndex(DBHelperLogIn.USER_PAS)).toString()
+                loginCloudFSMap(userName, password)
+            }
+            cursor.close()
         }
-        cursor.close()
     }
+
+//    fun isNotFirstLogIn(){
+//        val dbSaveLogin = DBHelperLogIn(view.context, null)
+//        val cursor = dbSaveLogin.getUser()
+//        STORAGE.isOnline = true
+//        cursor!!.moveToFirst()
+//        if(cursor.count != 0) {
+//            var userName = cursor.getString(cursor.getColumnIndex(DBHelperLogIn.USER_NAME)).toString()
+//            var password = cursor.getString(cursor.getColumnIndex(DBHelperLogIn.USER_PAS)).toString()
+//            loginCloudFSMap(userName, password)
+//        }
+//        cursor.close()
+//    }
 
     fun loginCloudFSMap(username: String, password: String) {
         val dbSaveLogin = DBHelperLogIn(view.context, null)
@@ -61,7 +90,7 @@ class modelMyLogin(val view: View, val activity: MainActivity) {
                                 STORAGE.UserName = username //We use the Value when Fill Menu -> UserName List
                                 STORAGE.Password = password //We use the Value when Fill LOG OUT. Cause do not get It from Sql Login. This way faster to write.
                                 holdOnAllViewsOnFragments(false)
-                                isOnlineUser(username, password, false) //If User Online, we cannot sign in from others gadgets
+                                isOnlineUserLogIn(username, password, false) //If User Online, we cannot sign in from others gadgets
                                 Navigation.findNavController(view)
                                     .navigate(R.id.action_myLoginFragment_to_itemFragment)
                             }
@@ -91,7 +120,35 @@ class modelMyLogin(val view: View, val activity: MainActivity) {
 
     }
 
-    fun isOnlineUser(userName : String, password : String, isOnline : Boolean){
+//    fun isOnlineUser(userName : String, password : String, isOnline : Boolean){
+//        val dbFSAddIsOnline = Firebase.firestore
+//
+//        val resultNameOfCollection = STORAGE.UserName.split("0")[0] //Delete Number of Users from end of the line
+//        val docRef = dbFSAddIsOnline.collection(resultNameOfCollection).document(STORAGE.docPathLogInDB)
+//
+//        val updates = hashMapOf<String, Any>( //Create new element for Fire Store
+//            STORAGE.collectionUser to userName,
+//            STORAGE.collectionPassword to password,
+//            STORAGE.collectionIsOnline to isOnline
+//        )
+//
+//        docRef
+//            .update(userName, updates)   //Replace Element in FS
+//            .addOnSuccessListener { Log.d("TAG", "DocumentSnapshot successfully updated!") }
+//            .addOnFailureListener { e -> Log.w("TAG", "Error updating document", e) }
+//    }
+
+    fun isOnlineUserLogIn(userName : String, password : String, isOnline : Boolean){
+    sentIsOnlineUserLogIn(userName, password, isOnline)
+            .subscribeOn(Schedulers.io())
+            .subscribe ( {
+                Log.w("TAG", "logIn isOnline")
+            },{
+                Log.w("TAG", "Error: not logIn isOnline")
+            })
+    }
+
+    fun sentIsOnlineUserLogIn(userName : String, password : String, isOnline : Boolean): Completable {
         val dbFSAddIsOnline = Firebase.firestore
 
         val resultNameOfCollection = STORAGE.UserName.split("0")[0] //Delete Number of Users from end of the line
@@ -103,9 +160,11 @@ class modelMyLogin(val view: View, val activity: MainActivity) {
             STORAGE.collectionIsOnline to isOnline
         )
 
-        docRef
-            .update(userName, updates)   //Replace Element in FS
-            .addOnSuccessListener { Log.d("TAG", "DocumentSnapshot successfully updated!") }
-            .addOnFailureListener { e -> Log.w("TAG", "Error updating document", e) }
+        return Completable.create { emitter ->
+            docRef
+                .update(userName, updates)   //Replace Element in FS
+                .addOnSuccessListener { emitter.onComplete() }
+                .addOnFailureListener { emitter.onError(it) }
+        }
     }
 }
