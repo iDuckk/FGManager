@@ -98,15 +98,17 @@ class MyItemRecyclerViewAdapter(
         val item = values[pos]
         val amountInt: Int? = item.amountDays.toIntOrNull()
         //Set Text in Cardholder Items
-        holder.tv_Item_NameProduct.text = item.productName
-        holder.tv_Item_Date.text = item.productDate
-        holder.tv_Item_Barcode.text = item.productBarcode // R.string.left_date.toString() + " $amountInt " + R.string.left_dates //
+        holder.tv_Item_NameProduct.text = " " + item.productName
+        holder.tv_Item_Date.text = " " + item.productDate
+        holder.tv_Item_Barcode.text = " " + item.productBarcode // R.string.left_date.toString() + " $amountInt " + R.string.left_dates //
         //var str : String = R.string.left_date.toString()
         if (amountInt == null) {
-            holder.tv_Item_Title_NumberDays.setText(R.string.expiration_date)
+            var str = R.string.expiration_date
+            holder.tv_Item_Title_NumberDays.setText(str)
             holder.tv_Item_Amout.visibility = View.GONE
         } else {
-            holder.tv_Item_Title_NumberDays.setText(R.string.left_date)
+            var str = R.string.left_date
+            holder.tv_Item_Title_NumberDays.setText(str)
             holder.tv_Item_Amout.setText(" $amountInt")
         }
     }
