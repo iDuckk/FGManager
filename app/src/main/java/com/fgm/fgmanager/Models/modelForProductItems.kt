@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.fgm.fgmanager.Adapters.MyItemRecyclerViewAdapter
 import com.fgm.fgmanager.DBHelpers.DBHelper
 import com.fgm.fgmanager.DBHelpers.DBHelperLogIn
+import com.fgm.fgmanager.Fragments.myAdapter
 import com.fgm.fgmanager.PoJo.placeholder.PlaceholderContent
 import com.fgm.fgmanager.R
 import com.fgm.fgmanager.STORAGE
@@ -29,7 +30,7 @@ import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
 
-class modelForProductItems(val ctx : Context?) { //(Rec : RecyclerView)
+class modelForProductItems(val ctx : Context) { //(Rec : RecyclerView)
 
     @SuppressLint("NotifyDataSetChanged")
     @RequiresApi(Build.VERSION_CODES.O)
@@ -84,13 +85,13 @@ class modelForProductItems(val ctx : Context?) { //(Rec : RecyclerView)
                 Log.d("TAG", "$source data: null")
             }
             PlaceholderContent.ITEMS.sortBy { it.numberForSorting } // Sorting of List
-            val list = PlaceholderContent.ITEMS.toMutableList() //That adapter think, it is new list
-            adapter.values = list
+            //val list = PlaceholderContent.ITEMS.toMutableList() //That adapter think, it is new list
+            adapter.submitList(PlaceholderContent.ITEMS.toMutableList())
         }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun CreateLocalDataBase(RecView : RecyclerView) {
+    fun CreateLocalDataBase(adapter: MyItemRecyclerViewAdapter) {
         var countedAmountDay: String = "0"
         var numOfSorting: Int = 0
         val formatter: DateTimeFormatter =
@@ -101,15 +102,16 @@ class modelForProductItems(val ctx : Context?) { //(Rec : RecyclerView)
             formatter
         )      //This Argument for counting number of days. If I set it in TextView, that Format is YYYY/MM/DD...
 
+        val db = DBHelper(ctx, null).getInstance(ctx)
         // creating a DBHelper class
         // and passing context to it
-        val db = DBHelper(ctx, null)
+        //val db = DBHelper(ctx, null)
 
         // below is the variable for cursor
         // we have called method to get
         // all names from our database
         // and add to name text view
-        val cursor = db.getProduct()
+        val cursor = db?.getProduct()
         // moving the cursor to first position and
         // appending value in the text view
 
@@ -178,9 +180,11 @@ class modelForProductItems(val ctx : Context?) { //(Rec : RecyclerView)
             // at last we close our cursor
             cursor.close()
             PlaceholderContent.ITEMS.sortBy { it.numberForSorting } // Sorting of List
-            RecView.adapter?.notifyItemInserted(PlaceholderContent.ITEMS.lastIndex)    // If change, Reload Recycler View
+//            val list = PlaceholderContent.ITEMS.toMutableList()
+            adapter.submitList(PlaceholderContent.ITEMS.toMutableList())
         }else{
             PlaceholderContent.ITEMS.clear()
+            adapter.submitList(PlaceholderContent.ITEMS.toMutableList())
         }
     }
 
@@ -195,14 +199,14 @@ class modelForProductItems(val ctx : Context?) { //(Rec : RecyclerView)
                     .setMessage(R.string.Question_Delete_Item)
                     .setPositiveButton(R.string.Answer_Delete_Item_Yes) {       //When click "Yes"
                             dialog, id ->
-                        PlaceholderContent.ITEMS.removeAt(position)
+                        //PlaceholderContent.ITEMS.removeAt(position)
                         if(STORAGE.TypeAccFree) {
                             deleteFromFireStoreDB(itemId)
 //                            Navigation.findNavController(holder.itemView)
 //                                .navigate(R.id.action_itemFragment_self) // That refresh ItemFragment
                         }else{
-                            val db = DBHelper(ctx,null)
-                            db.deleteCourse(itemId.toInt())
+                            val db = DBHelper(ctx, null).getInstance(ctx)
+                            db?.deleteCourse(itemId.toInt())
                                                     Navigation.findNavController(holder.itemView)
                             .navigate(R.id.action_itemFragment_self) // That refresh ItemFragment
                         }
@@ -248,11 +252,11 @@ class modelForProductItems(val ctx : Context?) { //(Rec : RecyclerView)
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun addItemSQLdbProducts(productName : String, productBarcode : String, productDate : String, productAmountDays : String){
-        val db = DBHelper(ctx, null)
+        val db = DBHelper(ctx, null).getInstance(ctx)
 
-        //PlaceholderContent.ITEMS.add(PlaceholderContent.PlaceholderItem(productName, productBarcode, productDate, productAmountDays))
-        //PlaceholderContent.ITEMS.sortBy { it.numberForSorting }
+//        PlaceholderContent.ITEMS.add(PlaceholderContent.PlaceholderItem(productName, productBarcode, productDate, productAmountDays))
+//        PlaceholderContent.ITEMS.sortBy { it.numberForSorting }
 
-        db.addProduct(productName, productBarcode, productDate, productAmountDays)
+        db?.addProduct(productName, productBarcode, productDate, productAmountDays)
     }
 }

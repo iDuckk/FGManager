@@ -78,7 +78,7 @@ class CraeteDateFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val bundle = Bundle()
-        val model = modelForProductItems(context)
+        val model = modelForProductItems(requireContext())
         val modelCreateFrag = modelCreateFragment(activity as MainActivity)
 
 
