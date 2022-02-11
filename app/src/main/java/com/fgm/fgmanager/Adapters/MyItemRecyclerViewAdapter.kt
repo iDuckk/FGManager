@@ -10,7 +10,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import com.fgm.fgmanager.Models.modelForProductItems
+import com.fgm.fgmanager.PoJo.placeholder.PlaceholderContent
 import com.fgm.fgmanager.PoJo.placeholder.PlaceholderContent.PlaceholderItem
 import com.fgm.fgmanager.R
 import com.fgm.fgmanager.databinding.FragmentItemBinding
@@ -20,17 +22,15 @@ import com.fgm.fgmanager.databinding.FragmentItemBinding
  * TODO: Replace the implementation with code for your data type.
  */
 var par : Context? = null
-class MyItemRecyclerViewAdapter(
-//    private val valuesReceivedList: MutableList<PlaceholderItem>
-) : RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder>() {
+class MyItemRecyclerViewAdapter : ListAdapter<PlaceholderItem, MyItemRecyclerViewAdapter.ViewHolder>(ItemDiffCallback()){
 
-    var values : MutableList<PlaceholderItem> = ArrayList()
-    set(value) {
-        val callback = ItemsListCallback(values, value)  //values is oldList, value is newList
-        val diffResult = DiffUtil.calculateDiff(callback)
-        field = value
-        diffResult.dispatchUpdatesTo(this)
-    }
+//    var values : MutableList<PlaceholderItem> = ArrayList()
+//    set(value) {
+//        val callback = ItemsListCallback(values, value)  //values is oldList, value is newList
+//        val diffResult = DiffUtil.calculateDiff(callback)
+//        field = value
+//        diffResult.dispatchUpdatesTo(this)
+//    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         par = parent.context
@@ -47,8 +47,8 @@ class MyItemRecyclerViewAdapter(
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = values[position]
-        val model = modelForProductItems(par)
+        val item = getItem(position)
+        val model = modelForProductItems(par!!)
 
         //val database = FirebaseDatabase.getInstance()
         //val myRef = database.getReference(STORAGE.FireBasePath)
@@ -61,8 +61,6 @@ class MyItemRecyclerViewAdapter(
         model.DialogToDelete(holder, item.keyProduct, position)              //Delete Item
 
     }
-
-    override fun getItemCount(): Int = values.size
 
     inner class ViewHolder(binding: FragmentItemBinding) : RecyclerView.ViewHolder(binding.root) {
         //        val idView: TextView = binding.itemNumber
@@ -82,7 +80,7 @@ class MyItemRecyclerViewAdapter(
     }
 
     fun SetColorPriorityRecycleView(holder: ViewHolder, pos : Int){
-        val item = values[pos]
+        val item = getItem(pos)
         val amountInt: Int? = item.amountDays.toIntOrNull()
             if (amountInt != null && amountInt > 0) {
                 when {
@@ -95,10 +93,10 @@ class MyItemRecyclerViewAdapter(
     }
 
     fun SetTextItemRecycleView(holder: ViewHolder, pos : Int){
-        val item = values[pos]
+        val item = getItem(pos)
         val amountInt: Int? = item.amountDays.toIntOrNull()
         //Set Text in Cardholder Items
-        holder.tv_Item_NameProduct.text = " " + item.productName
+        holder.tv_Item_NameProduct.text = " " + checkLength(item.productName)
         holder.tv_Item_Date.text = " " + item.productDate
         holder.tv_Item_Barcode.text = " " + item.productBarcode // R.string.left_date.toString() + " $amountInt " + R.string.left_dates //
         //var str : String = R.string.left_date.toString()
@@ -113,4 +111,10 @@ class MyItemRecyclerViewAdapter(
         }
     }
 
+    fun checkLength(str : String) : String{
+        if(str.length > 30){
+            var dropValue = str.length - 30
+            return "${str.dropLast(dropValue)}..."
+        }else return str
+    }
 }

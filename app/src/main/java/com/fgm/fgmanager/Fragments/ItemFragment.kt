@@ -48,7 +48,7 @@ class ItemFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_item_list, container, false)
 
-        val model = modelForProductItems(context)
+        val model = modelForProductItems(requireContext())
         val modelHelpers = modelHelpers(activity as MainActivity)
 
         val mActivity : MainActivity = activity as MainActivity
@@ -128,8 +128,8 @@ class ItemFragment : Fragment() {
                     model.CreateFireStoreDB(view, myAdapter)
                 }
                 }else{
-                    model.CreateLocalDataBase(view)//Offline DataBase
-                    myAdapter.values = PlaceholderContent.ITEMS
+//                    if(PlaceholderContent.ITEMS.isEmpty()){
+                    model.CreateLocalDataBase(myAdapter)    //Offline DataBase
                 }
                 progressBar.visibility = View.INVISIBLE
             }
