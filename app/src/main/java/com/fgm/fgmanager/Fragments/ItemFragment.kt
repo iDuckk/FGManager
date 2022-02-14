@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.navigation.Navigation
 import com.fgm.fgmanager.*
 import com.fgm.fgmanager.Adapters.MyItemRecyclerViewAdapter
@@ -31,6 +32,10 @@ var myAdapter : MyItemRecyclerViewAdapter  = MyItemRecyclerViewAdapter()
 class ItemFragment : Fragment() {
 
     private var columnCount = 1
+    val TYPE_THEME = "themeType"
+    val LIGHT_THEME = 0
+    val DARK_THEME = 1
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
