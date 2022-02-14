@@ -109,6 +109,9 @@
         <action
             android:id="@+id/action_menuFragment_to_itemUsersFragment"
             app:destination="@id/itemUsersFragment" />
+        <action
+            android:id="@+id/action_menuFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
     </fragment>
     <fragment
         android:id="@+id/itemUsersFragment"
@@ -130,5 +133,14 @@
         <action
             android:id="@+id/action_updatePasswordFragment_to_itemUsersFragment"
             app:destination="@id/itemUsersFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.fgm.fgmanager.Fragments.SettingsFragment"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings" >
+        <action
+            android:id="@+id/action_settingsFragment_to_menuFragment"
+            app:destination="@id/menuFragment" />
     </fragment>
 </navigation>

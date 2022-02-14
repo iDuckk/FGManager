@@ -80,5 +80,8 @@ class STORAGE {
 
         //Camera
         val CAMERA_RQ = 102
+
+        //Theme
+        var typeTheme = 0
     }
 }

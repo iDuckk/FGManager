@@ -8,7 +8,9 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.work.*
 import com.fgm.fgmanager.Models.modelAdvertisment
 import com.fgm.fgmanager.Models.modelHelpers
@@ -23,21 +25,28 @@ import java.util.concurrent.TimeUnit
 //val KEY_COUNT_VALUE = "key_count"
 
 class MainActivity : AppCompatActivity() {
-    //*************************************
 
+    val TYPE_THEME = "themeType"
+    val LIGHT_THEME = 0
+    val DARK_THEME = 1
+
+    //*************************************
+    //  TODO Horizontal landscape: editTextBarcode -> done instead of Next. ect
+    //  TODO иклнку закругленную.
     //*************************************
 
     //val CAMERA_RQ = 102
     //val itemsList : MutableList<PlaceholderContent.PlaceholderItem> = ArrayList()
     //lateinit var mAdView : AdView
     //var interAd : InterstitialAd? = null
-
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         supportActionBar?.hide()
         createNotificationChannel()//зарегистрировать канал уведомлений, Вызвать при запуске приложения
+//        setTheme()
 
         //val modelHelp = modelHelpers(this)
         val modelAdv = modelAdvertisment(this)
@@ -53,7 +62,17 @@ class MainActivity : AppCompatActivity() {
 
         //checkForPermissions(android.Manifest.permission.CAMERA, "camera", CAMERA_RQ)
     }
+    //Theme
+    fun setTheme(){
 
+        val sharedPref = this?.getPreferences(Context.MODE_PRIVATE)
+        val typeTheme = sharedPref.getInt(TYPE_THEME, LIGHT_THEME)
+        STORAGE.typeTheme = typeTheme
+        when (typeTheme) {
+            LIGHT_THEME -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            DARK_THEME -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        }
+    }
 
     private fun createNotificationChannel() {
         // Create the NotificationChannel, but only on API 26+ because

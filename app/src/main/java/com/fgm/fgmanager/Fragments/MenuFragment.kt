@@ -56,6 +56,7 @@ class MenuFragment : Fragment() {
         val b_Back = view.findViewById<Button>(R.id.b_Menu_Back)
         val b_Exit = view.findViewById<Button>(R.id.b_Menu_LogOut)
         val b_Users = view.findViewById<Button>(R.id.b_ListOfUsers)
+        val b_Settings = view.findViewById<Button>(R.id.b_Menu_Settings)
 
         val modelHelpers = modelHelpers(activity as MainActivity)
 
@@ -96,6 +97,9 @@ class MenuFragment : Fragment() {
             modelHelpers.DialogToQuit(view, STORAGE.MenuFrag)
         }
 
+        b_Settings.setOnClickListener{
+            Navigation.findNavController(view).navigate(R.id.action_menuFragment_to_settingsFragment)
+        }
     }
 
     companion object {
