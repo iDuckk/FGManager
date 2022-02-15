@@ -3,9 +3,26 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/AndroidStudioProjects/FGManager/app/src/main/res/layout/fragment_craete_date.xml" value="0.3712962962962963" />
+        <entry key="..\:/AndroidStudioProjects/FGManager/app/src/main/res/layout-land/fragment_calendar.xml" value="0.5697916666666667" />
+        <entry key="..\:/AndroidStudioProjects/FGManager/app/src/main/res/layout-land/fragment_craete_date.xml" value="0.47239583333333335" />
+        <entry key="..\:/AndroidStudioProjects/FGManager/app/src/main/res/layout-land/fragment_menu.xml" value="0.3671875" />
+        <entry key="..\:/AndroidStudioProjects/FGManager/app/src/main/res/layout-land/fragment_my_login.xml" value="0.3671875" />
+        <entry key="..\:/AndroidStudioProjects/FGManager/app/src/main/res/layout-land/fragment_registration.xml" value="0.4083333333333333" />
+        <entry key="..\:/AndroidStudioProjects/FGManager/app/src/main/res/layout-land/fragment_settings.xml" value="0.44479166666666664" />
+        <entry key="..\:/AndroidStudioProjects/FGManager/app/src/main/res/layout-land/fragment_update_password.xml" value="0.44479166666666664" />
+        <entry key="..\:/AndroidStudioProjects/FGManager/app/src/main/res/layout/activity_main.xml" value="0.559375" />
+        <entry key="..\:/AndroidStudioProjects/FGManager/app/src/main/res/layout/fragment_calendar.xml" value="0.5340167753960857" />
+        <entry key="..\:/AndroidStudioProjects/FGManager/app/src/main/res/layout/fragment_craete_date.xml" value="0.5" />
+        <entry key="..\:/AndroidStudioProjects/FGManager/app/src/main/res/layout/fragment_item.xml" value="0.559375" />
+        <entry key="..\:/AndroidStudioProjects/FGManager/app/src/main/res/layout/fragment_item_list.xml" value="0.559375" />
+        <entry key="..\:/AndroidStudioProjects/FGManager/app/src/main/res/layout/fragment_item_users.xml" value="0.559375" />
         <entry key="..\:/AndroidStudioProjects/FGManager/app/src/main/res/layout/fragment_menu.xml" value="0.4166666666666667" />
+        <entry key="..\:/AndroidStudioProjects/FGManager/app/src/main/res/layout/fragment_my_login.xml" value="0.559375" />
+        <entry key="..\:/AndroidStudioProjects/FGManager/app/src/main/res/layout/fragment_registration.xml" value="0.559375" />
+        <entry key="..\:/AndroidStudioProjects/FGManager/app/src/main/res/layout/fragment_scan_barcode.xml" value="0.559375" />
         <entry key="..\:/AndroidStudioProjects/FGManager/app/src/main/res/layout/fragment_settings.xml" value="0.4166666666666667" />
+        <entry key="..\:/AndroidStudioProjects/FGManager/app/src/main/res/layout/fragment_update_password.xml" value="0.559375" />
+        <entry key="..\:/AndroidStudioProjects/FGManager/app/src/main/res/layout/fragment_users_list.xml" value="0.559375" />
         <entry key="..\:/AndroidStudioProjects/FGmanager/app/src/main/res/drawable/ic_launcher_background.xml" value="0.396875" />
         <entry key="..\:/AndroidStudioProjects/FGmanager/app/src/main/res/drawable/roundedbutton.xml" value="0.396875" />
         <entry key="..\:/AndroidStudioProjects/FGmanager/app/src/main/res/layout/activity_main.xml" value="0.3578125" />

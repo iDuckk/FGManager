@@ -31,8 +31,7 @@ class MainActivity : AppCompatActivity() {
     val DARK_THEME = 1
 
     //*************************************
-    //  TODO Horizontal landscape: editTextBarcode -> done instead of Next. ect
-    //  TODO иклнку закругленную.
+    //  TODO иконку закругленную.
     //*************************************
 
     //val CAMERA_RQ = 102

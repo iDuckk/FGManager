@@ -19,108 +19,103 @@
             app:layout_constraintBottom_toBottomOf="@+id/b_Reg_Cancel"
             app:layout_constraintEnd_toStartOf="@+id/b_Reg_Cancel"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/b_Reg_Cancel"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintTop_toTopOf="@+id/b_Reg_Cancel" />
+
+        <TextView
+            android:id="@+id/tv_Name_Database"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tv_Reg_Name_Of_Database"
+            android:textColor="@color/purple_500"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/et_Name_Of_Database"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.486"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <EditText
+            android:id="@+id/et_Name_Of_Database"
+            android:layout_width="722dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:ems="10"
+            android:hint="@string/Hint_type_name_of_database"
+            android:inputType="textPersonName"
+            android:minHeight="48dp"
+            app:layout_constraintBottom_toTopOf="@+id/tv_Choose_the_Plan"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_Choose_the_Plan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="278dp"
+            android:layout_marginEnd="291dp"
+            android:text="@string/tv_Choose_Plan"
+            android:textColor="@color/purple_500"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/id_Radio_Group"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <RadioGroup
+            android:id="@+id/id_Radio_Group"
+            android:layout_width="722dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@+id/b_Reg_Cancel"
+            app:layout_constraintEnd_toEndOf="@+id/et_Name_Of_Database"
+            app:layout_constraintStart_toStartOf="@+id/et_Name_Of_Database"
+            android:scaleX="0.9"
+            android:scaleY="0.9">
+
+            <RadioButton
+                android:id="@+id/radioButton_5u"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:text="@string/users_5" />
+
+            <RadioButton
+                android:id="@+id/radioButton_15"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:text="@string/users_15"
+                />
+
+            <RadioButton
+                android:id="@+id/radioButton_25"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:text="@string/users_25" />
+
+            <RadioButton
+                android:id="@+id/radioButton_50"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:text="@string/users_50" />
+
+            <RadioButton
+                android:id="@+id/radioButton_100"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:text="@string/users_100" />
+
+        </RadioGroup>
 
         <Button
             android:id="@+id/b_Reg_Cancel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
-            android:layout_marginTop="20dp"
             android:layout_marginEnd="5dp"
-            android:layout_marginBottom="200dp"
+            android:layout_marginBottom="16dp"
             android:text="@string/Button_Cancel_Registration"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/b_Reg_Ok"
-            app:layout_constraintTop_toBottomOf="@+id/id_Radio_Group" />
-
-        <TextView
-            android:id="@+id/tv_Name_Database"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:text="@string/tv_Reg_Name_Of_Database"
-            android:textColor="@color/purple_500"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/et_Name_Of_Database"
-            app:layout_constraintEnd_toEndOf="@+id/et_Name_Of_Database"
-            app:layout_constraintHorizontal_bias="0.485"
-            app:layout_constraintStart_toStartOf="@+id/et_Name_Of_Database"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0" />
-
-        <EditText
-            android:id="@+id/et_Name_Of_Database"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="68dp"
-            android:layout_marginBottom="30dp"
-            android:ems="10"
-            android:hint="@string/Hint_type_name_of_database"
-            android:inputType="textPersonName"
-            android:minHeight="48dp"
-            app:layout_constraintBottom_toTopOf="@+id/tv_Choose_the_Plan"
-            app:layout_constraintEnd_toEndOf="@+id/b_Reg_Cancel"
-            app:layout_constraintHorizontal_bias="0.497"
-            app:layout_constraintStart_toStartOf="@+id/b_Reg_Ok"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/tv_Choose_the_Plan"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/tv_Choose_Plan"
-            android:textColor="@color/purple_500"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/id_Radio_Group"
-            app:layout_constraintEnd_toEndOf="@+id/et_Name_Of_Database"
-            app:layout_constraintHorizontal_bias="0.495"
-            app:layout_constraintStart_toStartOf="@+id/et_Name_Of_Database"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.87" />
-
-        <RadioGroup
-            android:id="@+id/id_Radio_Group"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            app:layout_constraintBottom_toTopOf="@+id/b_Reg_Ok"
-            app:layout_constraintEnd_toEndOf="@+id/et_Name_Of_Database"
-            app:layout_constraintStart_toStartOf="@+id/et_Name_Of_Database">
-
-            <RadioButton
-                android:id="@+id/radioButton_5u"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/users_5" />
-
-            <RadioButton
-                android:id="@+id/radioButton_15"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/users_15" />
-
-            <RadioButton
-                android:id="@+id/radioButton_25"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/users_25" />
-
-            <RadioButton
-                android:id="@+id/radioButton_50"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/users_50" />
-
-            <RadioButton
-                android:id="@+id/radioButton_100"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/users_100" />
-        </RadioGroup>
+            app:layout_constraintStart_toEndOf="@+id/b_Reg_Ok" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

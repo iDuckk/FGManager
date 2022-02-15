@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.CalendarView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.navigation.Navigation
@@ -61,6 +62,11 @@ class CalendarFragment : Fragment() {
         val tv_SelectedDate = view.findViewById<TextView>(R.id.tv_SelectedDate)
         val mActivity : MainActivity = activity as MainActivity
         val ad_FirstBaneer = mActivity.findViewById<AdView>(R.id.adViewFirstBanner)
+        val b_AddProduct = requireActivity().findViewById<Button>(R.id.button_Add_Product)
+        val linear = requireActivity().findViewById<LinearLayout>(R.id.layoutMenu)
+        //SET OFF Menu Bar
+        linear.visibility = View.GONE
+        b_AddProduct.visibility = View.GONE
 
         //Set AdView Banner
         if(STORAGE.TypeAccFree){

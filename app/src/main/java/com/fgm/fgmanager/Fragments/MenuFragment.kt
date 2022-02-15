@@ -18,6 +18,7 @@ import com.fgm.fgmanager.MainActivity
 import com.fgm.fgmanager.Models.modelHelpers
 import com.fgm.fgmanager.R
 import com.fgm.fgmanager.STORAGE
+import com.google.android.gms.ads.AdView
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -65,9 +66,12 @@ class MenuFragment : Fragment() {
         progressBar.visibility = View.INVISIBLE
         val b_AddProduct = mActivity.findViewById<Button>(R.id.button_Add_Product)
         val linear = mActivity.findViewById<LinearLayout>(R.id.layoutMenu)
+        val ad_FirstBaneer = mActivity.findViewById<AdView>(R.id.adViewFirstBanner)
         //SET OFF Menu Bar
         linear.visibility = View.GONE
         b_AddProduct.visibility = View.GONE // Take off Button of Ad new Product
+        //Set Off AdView Banner
+        ad_FirstBaneer.visibility = View.GONE
 
         requireActivity().onBackPressedDispatcher.addCallback(      //If press CallBack BUtton on phone
             viewLifecycleOwner,

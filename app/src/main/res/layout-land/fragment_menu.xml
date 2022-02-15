@@ -3,38 +3,44 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="Fragments.CalendarFragment">
+    tools:context=".Fragments.MenuFragment">
 
-    <!-- TODO: Update blank fragment layout -->
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tv_SelectedDate"
+        <Space
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:textSize="24sp"
-            android:hint="@string/hint_tv_SelectedDate"/>
-
-        <CalendarView
-            android:id="@+id/calendarView_My"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="39dp" />
 
         <Button
-            android:id="@+id/b_Calendar_Ok"
+            android:id="@+id/b_ListOfUsers"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@android:string/ok" />
+            android:text="@string/List_Of_Users" />
 
         <Button
-            android:id="@+id/b_Calendar_Cancel"
+            android:id="@+id/b_Menu_Settings"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/cancel" />
+            android:text="@string/Menu_Settings" />
+
+        <Button
+            android:id="@+id/b_Menu_LogOut"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/sign_out" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="82dp" />
+
+        <Button
+            android:id="@+id/b_Menu_Back"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/Menu_Back" />
     </LinearLayout>
 </FrameLayout>
