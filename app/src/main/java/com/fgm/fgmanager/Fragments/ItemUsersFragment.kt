@@ -6,9 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
@@ -25,6 +23,7 @@ import com.fgm.fgmanager.PoJo.User
 import com.fgm.fgmanager.PoJo.placeholder.PlaceholderContent
 import com.fgm.fgmanager.R
 import com.fgm.fgmanager.STORAGE
+import com.google.android.gms.ads.AdView
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import java.time.LocalDate
@@ -60,9 +59,17 @@ class ItemUsersFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_users_list, container, false)
 
+        val b_AddProduct = requireActivity().findViewById<Button>(R.id.button_Add_Product)
+        val linear = requireActivity().findViewById<LinearLayout>(R.id.layoutMenu)
+        val ad_FirstBaneer = requireActivity().findViewById<AdView>(R.id.adViewFirstBanner)
+        //SET OFF Menu Bar
+        linear.visibility = View.GONE
+        b_AddProduct.visibility = View.GONE // Take off Button of Ad new Product
+        //Set Off AdView Banner
+        ad_FirstBaneer.visibility = View.GONE
+
         val modelUserList = modelUsersList(activity as MainActivity)
-        val mActivity : MainActivity = activity as MainActivity
-        val progressBar = mActivity.findViewById<ProgressBar>(R.id.progressBar)
+        val progressBar = requireActivity().findViewById<ProgressBar>(R.id.progressBar)
 
 //        val tv_usersListName = view.findViewById<TextView>(R.id.et_Users_UserName) //EDIT TEXT!!!
 //        val tv_usersListPassword = view.findViewById<TextView>(R.id.et_Users_Password)

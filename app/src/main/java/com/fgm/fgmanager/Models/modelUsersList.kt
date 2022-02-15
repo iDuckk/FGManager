@@ -53,9 +53,9 @@ class modelUsersList(val activity: MainActivity) {
             } else {
                 Log.d("TAG", "$source data: null")
             }
+            STORAGE.ITEMS.sortBy { it.User }
             //Last Item FOR BUTTON
             STORAGE.ITEMS.add(User(STORAGE.buttonString,""))
-            STORAGE.ITEMS.sortBy { it.User }
             progressBar.visibility = View.INVISIBLE
 //            PlaceholderContent.ITEMS.sortBy { it.numberForSorting } // Sorting of List
             RecView.adapter?.notifyDataSetChanged()    // If change, Reload Recycler View

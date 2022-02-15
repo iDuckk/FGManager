@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
@@ -17,6 +18,7 @@ import com.fgm.fgmanager.Models.modelForProductItems
 import com.fgm.fgmanager.Models.modelUpPassword
 import com.fgm.fgmanager.R
 import com.fgm.fgmanager.STORAGE
+import com.google.android.gms.ads.AdView
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -54,6 +56,15 @@ class UpdatePasswordFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val b_AddProduct = requireActivity().findViewById<Button>(R.id.button_Add_Product)
+        val linear = requireActivity().findViewById<LinearLayout>(R.id.layoutMenu)
+        val ad_FirstBaneer = requireActivity().findViewById<AdView>(R.id.adViewFirstBanner)
+        //SET OFF Menu Bar
+        linear.visibility = View.GONE
+        b_AddProduct.visibility = View.GONE // Take off Button of Ad new Product
+        //Set Off AdView Banner
+        ad_FirstBaneer.visibility = View.GONE
 
         val b_Users_Ok = view.findViewById<Button>(R.id.b_Users_Pass_Ok)
         val b_Users_Cancel = view.findViewById<Button>(R.id.b_Users_Pass_Cancel)

@@ -5,11 +5,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.LinearLayout
 import androidx.navigation.Navigation
 import com.budiyev.android.codescanner.CodeScanner
 import com.budiyev.android.codescanner.CodeScannerView
 import com.budiyev.android.codescanner.DecodeCallback
 import com.fgm.fgmanager.R
+import com.google.android.gms.ads.AdView
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -46,6 +49,16 @@ class ScanBarcodeFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+        val b_AddProduct = requireActivity().findViewById<Button>(R.id.button_Add_Product)
+        val linear = requireActivity().findViewById<LinearLayout>(R.id.layoutMenu)
+        val ad_FirstBaneer = requireActivity().findViewById<AdView>(R.id.adViewFirstBanner)
+        //SET OFF Menu Bar
+        linear.visibility = View.GONE
+        b_AddProduct.visibility = View.GONE // Take off Button of Ad new Product
+        //Set Off AdView Banner
+        ad_FirstBaneer.visibility = View.GONE
+
         val scannerView = view.findViewById<CodeScannerView>(R.id.scanner_view)
         val activity = requireActivity()
         val bundle = Bundle()
