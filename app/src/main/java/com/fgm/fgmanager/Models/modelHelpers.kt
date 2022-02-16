@@ -1,38 +1,24 @@
 package com.fgm.fgmanager.Models
 
-import android.annotation.SuppressLint
 import android.app.AlertDialog
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.content.Context
-import android.content.pm.PackageManager
 import android.os.Build
 import android.util.Log
 import android.view.View
-import android.widget.TextView
 import androidx.annotation.RequiresApi
-import androidx.core.app.ActivityCompat
-import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
-import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.navigation.Navigation
 import androidx.work.Constraints
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.fgm.fgmanager.DBHelpers.DBHelperLogIn
-import com.fgm.fgmanager.Fragments.CraeteDateFragment
 import com.fgm.fgmanager.MainActivity
 import com.fgm.fgmanager.R
 import com.fgm.fgmanager.STORAGE
 import com.fgm.fgmanager.WorkerManagers.DailyWorker
 import com.fgm.fgmanager.WorkerManagers.DailyWorkerFSdb
-import com.google.android.material.internal.ContextUtils.getActivity
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import io.reactivex.rxjava3.core.Completable
-import io.reactivex.rxjava3.core.Scheduler
-import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -104,7 +90,7 @@ class modelHelpers(val activity: MainActivity) {
             .setPositiveButton(R.string.Answer_Delete_Item_Yes){
                     dialog, id ->
                 if(STORAGE.TypeAccFree) {
-                    isOnlineUserLogOut()
+                    isOnlineUser(true)
                     val dbSaveLogin = DBHelperLogIn(view.context, null)
                     dbSaveLogin.deleteCourse(STORAGE.UserName)
                 }
@@ -118,8 +104,8 @@ class modelHelpers(val activity: MainActivity) {
         dialog.show()
     }
 
-        fun isOnlineUserLogOut(){
-            sentIsOnlineUserLogOut()
+        fun isOnlineUser(isOnline : Boolean){
+            sentIsOnlineUserLogOut(isOnline)
                 .subscribeOn(Schedulers.io())
                 .subscribe ( {
                     Log.w("TAG", "logOut")
@@ -128,7 +114,7 @@ class modelHelpers(val activity: MainActivity) {
                 })
     }
 
-    fun sentIsOnlineUserLogOut(): Completable {
+    fun sentIsOnlineUserLogOut(isOnline : Boolean): Completable {
         val dbFSAddIsOnline = Firebase.firestore
 
         val resultNameOfCollection = STORAGE.UserName.split("0")[0] //Delete Number of Users from end of the line
@@ -137,7 +123,7 @@ class modelHelpers(val activity: MainActivity) {
         val updates = hashMapOf<String, Any>( //Create new element for Fire Store
             STORAGE.collectionUser to STORAGE.UserName,
             STORAGE.collectionPassword to STORAGE.Password,
-            STORAGE.collectionIsOnline to true
+            STORAGE.collectionIsOnline to isOnline
         )
 
         return Completable.create { emitter ->

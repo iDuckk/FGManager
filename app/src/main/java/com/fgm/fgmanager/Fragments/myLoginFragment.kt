@@ -100,7 +100,8 @@ class myLoginFragment : Fragment() {
             }
         )
 
-        modelLogIn.isNotFirstLogIn() // If we logged yet
+        //modelLogIn.isNotFirstLogIn() // If we logged yet
+        modelLogIn.isNotFirst()
 
         tv_Registration.setOnClickListener(){
             Navigation.findNavController(this.requireView()).navigate(R.id.action_myLoginFragment_to_registrationFragment)

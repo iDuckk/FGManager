@@ -7,8 +7,6 @@ import android.content.Context
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.work.*
@@ -45,7 +43,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         supportActionBar?.hide()
         createNotificationChannel()//зарегистрировать канал уведомлений, Вызвать при запуске приложения
-//        setTheme()
 
         //val modelHelp = modelHelpers(this)
         val modelAdv = modelAdvertisment(this)
@@ -61,6 +58,19 @@ class MainActivity : AppCompatActivity() {
 
         //checkForPermissions(android.Manifest.permission.CAMERA, "camera", CAMERA_RQ)
     }
+
+    override fun onPause() {
+        if(STORAGE.TypeAccFree) //When close app, isOnline = true
+            modelHelpers(this).isOnlineUser(true)
+        super.onPause()
+    }
+
+    override fun onResume() {
+        if(STORAGE.TypeAccFree) //When reOpen app, isOnline = false
+            modelHelpers(this).isOnlineUser(false)
+        super.onResume()
+    }
+
     //Theme
     fun setTheme(){
 
