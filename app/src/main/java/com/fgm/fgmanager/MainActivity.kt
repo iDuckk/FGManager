@@ -38,7 +38,6 @@ class MainActivity : AppCompatActivity() {
     //var interAd : InterstitialAd? = null
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
-        setTheme()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         supportActionBar?.hide()
@@ -57,6 +56,11 @@ class MainActivity : AppCompatActivity() {
 //        mActivity.notificationDate(username) //notification
 
         //checkForPermissions(android.Manifest.permission.CAMERA, "camera", CAMERA_RQ)
+    }
+
+    override fun onStart() {
+        setTheme()
+        super.onStart()
     }
 
     override fun onPause() {
