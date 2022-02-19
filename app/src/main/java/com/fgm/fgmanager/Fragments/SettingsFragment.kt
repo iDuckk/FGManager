@@ -1,21 +1,28 @@
 package com.fgm.fgmanager.Fragments
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Context.MODE_PRIVATE
+import android.os.Build
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.Switch
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import com.fgm.fgmanager.R
 import com.fgm.fgmanager.STORAGE
 import com.google.android.gms.ads.AdView
+import java.util.*
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -52,6 +59,7 @@ class SettingsFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_settings, container, false)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("UseSwitchCompatOrMaterialCode")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -84,6 +92,8 @@ class SettingsFragment : Fragment() {
         switchTheme.setOnClickListener{
             if(switchTheme.isChecked){
                 setTheme(AppCompatDelegate.MODE_NIGHT_YES, DARK_THEME)
+
+//                Log.d("TAG", value)
             }else{
                 setTheme(AppCompatDelegate.MODE_NIGHT_NO, LIGHT_THEME)
             }

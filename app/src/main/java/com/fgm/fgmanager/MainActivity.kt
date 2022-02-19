@@ -30,6 +30,8 @@ class MainActivity : AppCompatActivity() {
 
     //*************************************
     //  TODO иконку закругленную.
+    // TODO Toast multi run
+    // TODO исправить данные в Item
     //*************************************
 
     //val CAMERA_RQ = 102
@@ -63,11 +65,16 @@ class MainActivity : AppCompatActivity() {
         super.onStart()
     }
 
-    override fun onPause() {
+    override fun onStop() {
         if(STORAGE.TypeAccFree) //When close app, isOnline = true
             modelHelpers(this).isOnlineUser(true)
-        super.onPause()
+        super.onStop()
     }
+//    override fun onPause() {
+//        if(STORAGE.TypeAccFree) //When close app, isOnline = true
+//            modelHelpers(this).isOnlineUser(true)
+//        super.onPause()
+//    }
 
     override fun onResume() {
         if(STORAGE.TypeAccFree) //When reOpen app, isOnline = false
