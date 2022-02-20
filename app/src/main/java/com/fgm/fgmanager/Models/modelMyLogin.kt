@@ -20,6 +20,32 @@ class modelMyLogin(val view: View, val activity: MainActivity) {
         STORAGE.TypeAccFree = false
         Navigation.findNavController(view).navigate(R.id.action_myLoginFragment_to_itemFragment)
     }
+    fun isNotFirstLogIn() : Boolean{
+        var userName : String = ""
+        var password : String = ""
+        val mActivity : MainActivity = activity as MainActivity
+        val progressBar = mActivity.findViewById<ProgressBar>(R.id.progressBar)
+        val dbSaveLogin = DBHelperLogIn(view.context, null)
+        val cursor = dbSaveLogin.getUser()
+        cursor!!.moveToFirst()
+        if(cursor.count != 0) {
+            userName = cursor.getString(cursor.getColumnIndex(DBHelperLogIn.USER_NAME)).toString()
+            password = cursor.getString(cursor.getColumnIndex(DBHelperLogIn.USER_PAS)).toString()
+
+            STORAGE.isOnline = true
+            val resultNameOfCollection = userName.split("0")[0] //Delete Number of Users from end of the line
+            STORAGE.isAdmin = userName.drop(resultNameOfCollection.lastIndex + 1) // Take Last 3 Char (001, 002 ...)
+            STORAGE.UserName = userName //We use the Value when Fill Menu -> UserName List
+            STORAGE.Password = password //We use the Value when Fill LOG OUT. Cause do not get It from Sql Login. This way faster to write.
+            STORAGE.TypeAccFree = true
+            progressBar.visibility = View.VISIBLE
+
+            isOnlineUserLogIn(userName, password, false) //If User Online, we cannot sign in from others gadgets
+        }
+        cursor.close()
+        Log.d("TAG", userName)
+        return userName != "" && password != ""
+    }
 
 //    fun isNotFirstLogIn(){
 //        sentIsNotFirstLogIn()
@@ -48,32 +74,32 @@ class modelMyLogin(val view: View, val activity: MainActivity) {
 //        }
 //    }
 
-    fun isNotFirst(){
-        val dbSaveLogin = DBHelperLogIn(view.context, null)
-        val cursor = dbSaveLogin.getUser()
-        var userName : String = ""
-        var password : String = ""
-        val mActivity : MainActivity = activity as MainActivity
-        val progressBar = mActivity.findViewById<ProgressBar>(R.id.progressBar)
-        cursor!!.moveToFirst()
-        if(cursor.count != 0) {
-            userName = cursor.getString(cursor.getColumnIndex(DBHelperLogIn.USER_NAME)).toString()
-            password = cursor.getString(cursor.getColumnIndex(DBHelperLogIn.USER_PAS)).toString()
-        }
-        cursor.close()
-
-        val resultNameOfCollection = userName.split("0")[0] //Delete Number of Users from end of the line
-        STORAGE.isAdmin = userName.drop(resultNameOfCollection.lastIndex + 1) // Take Last 3 Char (001, 002 ...)
-        STORAGE.UserName = userName //We use the Value when Fill Menu -> UserName List
-        STORAGE.Password = password //We use the Value when Fill LOG OUT. Cause do not get It from Sql Login. This way faster to write.
-        STORAGE.TypeAccFree = true
-        progressBar.visibility = View.VISIBLE
-
-        isOnlineUserLogIn(userName, password, false) //If User Online, we cannot sign in from others gadgets
-
-        Navigation.findNavController(view)
-            .navigate(R.id.action_myLoginFragment_to_itemFragment)
-    }
+//    fun isNotFirst(){
+//        val dbSaveLogin = DBHelperLogIn(view.context, null)
+//        val cursor = dbSaveLogin.getUser()
+//        var userName : String = ""
+//        var password : String = ""
+//        val mActivity : MainActivity = activity as MainActivity
+//        val progressBar = mActivity.findViewById<ProgressBar>(R.id.progressBar)
+//        cursor!!.moveToFirst()
+//        if(cursor.count != 0) {
+//            userName = cursor.getString(cursor.getColumnIndex(DBHelperLogIn.USER_NAME)).toString()
+//            password = cursor.getString(cursor.getColumnIndex(DBHelperLogIn.USER_PAS)).toString()
+//        }
+//        cursor.close()
+//
+//        val resultNameOfCollection = userName.split("0")[0] //Delete Number of Users from end of the line
+//        STORAGE.isAdmin = userName.drop(resultNameOfCollection.lastIndex + 1) // Take Last 3 Char (001, 002 ...)
+//        STORAGE.UserName = userName //We use the Value when Fill Menu -> UserName List
+//        STORAGE.Password = password //We use the Value when Fill LOG OUT. Cause do not get It from Sql Login. This way faster to write.
+//        STORAGE.TypeAccFree = true
+//        progressBar.visibility = View.VISIBLE
+//
+//        isOnlineUserLogIn(userName, password, false) //If User Online, we cannot sign in from others gadgets
+//
+//        Navigation.findNavController(view)
+//            .navigate(R.id.action_myLoginFragment_to_itemFragment)
+//    }
 
 //    fun isNotFirstLogIn(){
 //        val dbSaveLogin = DBHelperLogIn(view.context, null)
